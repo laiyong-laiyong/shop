@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.packages.mapper.PackagesMapper">
+
+	<select id="page" resultType="com.sobey.module.packages.model.Packages" parameterType="com.sobey.module.packages.model.Packages">
+		select * from mall_product_packages vs
+		<include refid="whereSql"></include>
+		order by vs.order asc
+	</select>
+	
+	
+	<sql id="whereSql">
+	  <where>
+				<if test="name != null and name != ''"> and vs.name like CONCAT('%',#{name},'%')  </if>
+				
+				<if test="uuid != null and uuid != ''"> and vs.uuid = #{uuid} </if>
+				<if test="productId != null and productId != ''"> and vs.productId = #{productId} </if>
+				<if test="code != null and code != ''"> and vs.code = #{code} </if>
+				<if test="startDate != null and startDate != ''"><![CDATA[ and #{startDate} <= createDate ]]></if>
+				<if test="endDate != null and endDate != ''"><![CDATA[ and #{endDate} >= createDate ]]></if>
+	 </where>
+	</sql>
+	
+	
+	
+	
+	
+	
+	
+</mapper>

@@ -1,0 +1,22 @@
+
+#C此文件是为了将springboot项目放入到k8s中，读取其中的配置的。本地测试不要此文件，请将此文件重命名,即可正确启动
+management:
+     endpoint:
+        restart:
+           enabled: true
+
+spring:
+   application:
+     name: initFile
+   cloud:
+     kubernetes:
+        reload: 
+           enabled: true
+           mode: event
+        config:
+           name: video-cache-config
+           namespace: default
+        client:
+          namespace: default
+          
+          

@@ -1,0 +1,113 @@
+server:
+  #address: 172.16.135.70
+  #C端口
+  port: 80
+  #C上下文路径
+  servlet:
+    context-path: /sobeyMallPay
+  #C内置tomcat编码
+  tomcat:
+    uriEncoding: utf-8
+
+wx-pay:
+  #商户号
+  mch-id: 1575382301
+  #服务商的APPID
+  appid: wx0a25bf4283fda540
+  #api密钥
+  key: 4820P6m0079uFX5x4JXP9SX4b51mf65F
+  #通知回调地址
+  notice-url: ${mall.domain.protocol}://${mall.domain.config}/sobeyMallPay/notification/wx
+  #仅支付通知回调
+  only-pay-notice-url: ${mall.domain.protocol}://${mall.domain.config}/sobeyMallPay/notification/onlyPay
+
+zfb-pay:
+  url: https://openapi.alipay.com/gateway.do #PC场景下单地址
+  appid: 2021001147652994
+  product_code: FAST_INSTANT_TRADE_PAY
+  sign_type: RSA2
+  private_key: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCAwgMSOhrwaamevI1YbcGmWA6JHEMcRcpFqi8nxiKUDuj6qhajeETafaKoaMLyM5vkPRmx5/rH+lsRWyQagjG4K6fPUZUwcwgYLYeypCuz6868NjWbzNFDyVUJ6bSgKMb0BIrriMMwCFF0UdQCMt/vSyfwOBUSLtt2VrdRBTygERNpT4el0jBOFRml9S12idxRj++zrWzBFy2D27In8RxZiGX5mCLeJeDjg7RanG3QSn+6qbmFf4IlScacldmXzEMtIOwh+48XIfuXOQYoIHShWhFAcAr0rM8aaopKgKw86aXKtP1SBbQYd10blG1rA5YGW1poiv4PkHZRmC1xDdhbAgMBAAECggEAahBnu0IGIvjHcy1bOfbfyIlNIAEZ/1Y2M4Dna1o57cEChkpKb8qI3XsU3Km/vQhqaG80lWrFGKrRDdEIQpXxIwdDKvLHdKuthU0sNSorngCnwj7dlkP4NmDJHmtYEX7FtQlw7mkwcIbJoootnMoP0e0VLzrjkKDsw+TXCXTI5gk8Skh1aJZWdL4kwJsdmkfIIkSDLoyCmdAHtR2Tlh75UqY71c8SgPfif0f23TS15ALWwCtRJNnLf5jaBwcYS/vuiy5M9ToXURp1TtLsYi3zUJrocLc/41pgVHFBi6DOG4vRvdOFhSqqDd3T/93Z6bU/Tly08jlSwdVcYtst2sWTYQKBgQDTy6yfdtMiW6GLhO9pYG4WF9Wn80lIwWq9Z0l490An7qoNj/VNZPNhz0T+gog4dUJR2jMVNHnlze2930pkjIVWow+u48LhKoYSyXjn8N8lK4KtWbekFZLznzr6LdsfIVNzM57Jzxr3IHbhg4pJ93dcUx8BGujNYXwIx3rL7zuKEwKBgQCboZja/vYbLnjvWtPobBVVL6mBfBbcKnPgxBII/ocr0J+znpcQFYAPAHgAiyNDgv5qp5QVURy/9z9iix6QPSbpxjN05aVacOHyQzoYQTPCnwUDNGx4dhphZmiPvOK7vRbNoDa5iQE4AskimRo+RibxC6eKJCFsC0JKivEiiyDBmQKBgB8cjSgDkXI7mZhgF7cYBjPSnn0EXOCGIQLfmEhfsZnsEijZ28PZr3LPuqfUTuRUPUC+18AmrD1YqbK5iTkJ91BJtbUQGgFveLBrzgnsNStFn/WM90/wJ10IJ+a2M7j38UU78PheJuzkZPItm3PQGUWDpEtKQ6ZfypOTkfNBGjLnAoGAHUN2fX9BgXzsin02qVZhcIIkyk8t8ToeTd4wUfaiLg/tZ5Xja8fPK4L4DYocGF6yPhXCl3uH/2SbS4lDNvX4si5tkIZ54BantakEbHkeJXNHOwIJf2EdtsDN2nE25Pw6JHICuEJVs1V6woGtWJZSTjLVzvjaO/ml/mQ/0TH998kCgYBEE2MaZahK8Jh1b3O+X0erKrFWyn6YX/KlkGHQVzgU4jYYb0hYemcwK61Q6kUJTJkng3sF/X9gro4s8/ctU0KGa8KLhWVSW84vPxBlq94Zi243U7Cpof6nii7rchtt2SGgLroqa96+iBE96lpXw+Iy+39tDzHAVOZmEKahYutyXg==
+  public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgMIDEjoa8GmpnryNWG3BplgOiRxDHEXKRaovJ8YilA7o+qoWo3hE2n2iqGjC8jOb5D0Zsef6x/pbEVskGoIxuCunz1GVMHMIGC2HsqQrs+vOvDY1m8zRQ8lVCem0oCjG9ASK64jDMAhRdFHUAjLf70sn8DgVEi7bdla3UQU8oBETaU+HpdIwThUZpfUtdoncUY/vs61swRctg9uyJ/EcWYhl+Zgi3iXg44O0Wpxt0Ep/uqm5hX+CJUnGnJXZl8xDLSDsIfuPFyH7lzkGKCB0oVoRQHAK9KzPGmqKSoCsPOmlyrT9UgW0GHddG5RtawOWBltaaIr+D5B2UZgtcQ3YWwIDAQAB
+  format: JSON
+  #应用公钥
+  app_cert_path: appCertPublicKey_2021001147652994.crt
+  #支付宝公钥证书
+  alipay_cert_path: alipayCertPublicKey_RSA2.crt
+  #支付宝根证书
+  alipay_root_cert_path: alipayRootCert.crt
+  #异步回调地址
+  notify_url: ${mall.domain.protocol}://${mall.domain.config}/sobeyMallPay/V1/alipay/callback/async
+  #同步回调地址
+  #return_url: http://${pay.zfb.return.url}/sobeyMallPay/media/success.html
+  
+  #证书的绝对路径地址,分为windows和linux
+  #address: D:\common\workspace\git\repository\sobey-mall-git\sobeyMall\modules\sobeyMallPay\src\main\resources\crt\
+  address: /usr/local/sobeyMallPay/crt/zfb/
+spring:
+  banner:
+    location: banner.txt
+  main:
+    banner-mode: console
+  flyway:
+    # 是否执行不含元数据表的非空模式迁移
+    baseline-on-migrate: true
+    # 启用flyway
+    enabled: true
+    # 禁止清理数据表
+    clean-disabled: true
+    # 版本号
+    baseline-version: 2020.01.01
+    # SQL迁移的文件名前缀
+    sql-migration-prefix: V
+    # SQL迁移的文件名后缀
+    sql-migration-suffixes: .sql
+    validate-on-migrate: true
+    # SQL迁移的文件所在位置
+    locations: classpath:db/migration
+    # 检查迁移脚本位置是否存在
+    check-location: false
+  #C数据库配置    
+  datasource:
+      url: jdbc:mysql://${mall.mysql.url}/${pay.db}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&createDatabaseIfNotExist=true
+      username: ${mall.mysql.username}
+      password: ${mall.mysql.password}
+      #url: jdbc:mysql://localhost:3306/sobey-mall-pay?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+      #username: root
+      #password: root
+  #rabbitmq配置
+  rabbitmq:
+    host: ${mall.rabbit.host}
+    port: ${mall.rabbit.port}
+    username: ${mall.rabbit.username}
+    password: ${mall.rabbit.password}
+    listener:
+      simple:
+        acknowledge-mode: auto #消息消费成功自动通知服务端确认
+        default-requeue-rejected: false #消费发生未被catch住的异常时直接抛弃消息
+        prefetch: 5 #每个consumer最大可以缓存5条待处理的消息在本地
+        retry:
+          enabled: false #推送消息失败是否开启重试机制，默认false，这里推送失败手动处理消息
+        concurrency: 3 #最小的监听消息的线程数
+        max-concurrency: 18 #最大的监听消息的线程数
+    publisher-confirm-type: correlated #消息成功发送到交换器后触发回调
+    publisher-returns: true #根据指定的routingKey找不到队列时触发回调
+  redis:
+    host: ${mall.redis.host}
+    port: ${mall.redis.port}
+    password: ${mall.redis.password}
+#生成代金券兑换码需要的seed
+voucher:
+  seed: sobeyMallVoucher
+
+#公钥私钥(主要用于充值验证,也可以使用在其他地方) RSA算法
+key-pair:
+  public: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDEl8LIWH9iXkQL/RBMarqU8FEVaO8bn9RP9ED4KbkuvyxOV/2G60LuUiT8Yfr98uDqqBjrigKdjy2W87rw6y19oZlvNkfrUO4KMzJthMkwDQV0UUA9IAYuxxEJb4dYlhcAMb5cT9HG5Zb5F/bsh7I7zJYMC6LelsHrDQC8WCm1UQIDAQAB'
+  private: 'MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAMSXwshYf2JeRAv9EExqupTwURVo7xuf1E/0QPgpuS6/LE5X/YbrQu5SJPxh+v3y4OqoGOuKAp2PLZbzuvDrLX2hmW82R+tQ7gozMm2EyTANBXRRQD0gBi7HEQlvh1iWFwAxvlxP0cbllvkX9uyHsjvMlgwLot6WwesNALxYKbVRAgMBAAECgYEAjLbHr9lQTFuGv0ICsX/PTx34G6gBRbeQIy6Edlx+9QvXLbhjenfYb3cSjCehnLWE8dEiDS26k4ZRLnQEQb9Dzh5eGLyvimHphlJ/hb4L8qQXeW87e/NVsNUWcJl8dSBXYAq02KTsJL998jdJ+VW/B+4wOsYlf3bcijOYAG8eWmUCQQD7tDnLR1d6mvcoWzeBfDbWvvArSFGKr3dUzLJ2loMrCPXtqLO0jNfkVKtzBpUbbE5HtpjDnGfEtj/lpF06goeDAkEAx/K8pyV/CslpK6a4jNmcmwjKWR7wgcPc+PQXOw55i1wZrVjZEFYqEnOOxXVSyolRNpHO9pPxeRiGmuA/tT5jmwJBAJCJ5A5Jf4CWcIuqJeujatJSfxQ7ySd8r2fwzCKxN82ErcS19cwefPNPc8zv4LwIq8MepgbeT/B0P6kdg7PPtQUCQA0ErenIFDR0lqdj7IInLP4fHWWeERSx1vJSmiybLai4L2fM8B0TLxwScApFMEXFmQcPiUUerssuoJz22s8HJ98CQQC6ldeNrD8N2jfsZDnR9QXcp1WdqioFZGV+j72SY8whZEWPYm8He3RM0POYLxsyBOTlrrKX02zldTALWDdX9Tfd'
+
+#定时任务
+sobey-task:
+  #必须使用单引号:生效yes,不生效no
+  enable: 'no'
+
+
+    

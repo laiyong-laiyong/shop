@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sobey.module.favorite.mapper.FavoriteMapper">
+
+	<select id="page"
+		resultType="com.sobey.module.favorite.model.Favorite"
+		parameterType="com.sobey.module.favorite.model.Favorite">
+		select * from mall_product_favorite mpf
+		<include refid="whereSql"></include>
+	</select>
+
+
+
+
+
+	<sql id="whereSql">
+		<where>
+
+			<if test="uuid != null and uuid != ''"> and mpf.uuid = #{uuid} </if>
+			<if test="userCode != null and userCode != ''"> and mpf.userCode = #{userCode} </if>
+			<if test="productId != null and productId != ''"> and mpf.productId = #{productId} </if>
+			<if test="startDate != null and startDate != ''"><![CDATA[ and #{startDate} <= createDate ]]></if>
+			<if test="endDate != null and endDate != ''"><![CDATA[ and #{endDate} >= createDate ]]></if>
+		</where>
+	</sql>
+
+	<select id="list"  resultMap="favoriteMap">
+
+		select
+		   mpf.uuid,
+		   mpf.userCode,
+		   mpf.productId,
+		   mpf.createDate,
+		   mpf.updateDate,
+		   mp.enableRelation
+		from mall_product_favorite mpf
+		left join mall_product mp on mpf.productId = mp.uuid
+		<include refid="whereSql"></include>
+	</select>
+	
+	
+	<resultMap id="favoriteMap" type="com.sobey.module.favorite.model.Favorite" >
+		<id property="uuid" column="uuid"/>
+		<result property="userCode" column="userCode"/>
+		<result property="productId" column="productId"/>
+		<result property="createDate" column="createDate"/>
+		<result property="updateDate" column="updateDate"/>
+		<result property="enableRelation" column="enableRelation"/>
+	</resultMap>
+
+
+
+
+
+</mapper>

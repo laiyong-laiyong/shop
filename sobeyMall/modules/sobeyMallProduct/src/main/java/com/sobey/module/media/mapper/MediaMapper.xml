@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.media.mapper.MediaMapper">
+
+
+
+
+
+	<select id="page"
+		resultType="com.sobey.module.media.model.Media"
+		parameterType="com.sobey.module.media.model.Media">
+		select
+		*
+		from mall_product_media ct
+		<where>
+			<if test="name != null and name != ''"> and ct.name like CONCAT('%',#{name},'%')    </if>
+		</where>
+		order by ct.createDate asc
+	</select>
+
+
+	<select id="list"
+		resultType="com.sobey.module.media.model.Media"
+		parameterType="com.sobey.module.media.model.Media">
+		select
+		*
+		from mall_product_media ct
+		<where>
+			<if test="uuid != null and uuid != ''"> and ct.uuid = #{uuid}   </if>
+			<if test="name != null and name != ''"> and ct.name like CONCAT('%',#{name},'%')    </if>
+			<if test="mediaId != null and mediaId != ''"> and ct.mediaId = #{mediaId}   </if>
+			<if test="productId != null and productId != ''"> and ct.productId = #{productId}   </if>
+		</where>
+		order by ct.createDate asc
+	</select>
+
+	<delete id="remove">
+		delete from mall_product_media
+		<where>
+			<if test="uuid != null and uuid != ''"> and  uuid = #{uuid} </if>
+			<if test="mediaId != null and mediaId != ''"> and mediaId = #{mediaId}   </if>
+			<if test="productId != null and productId != ''"> and productId = #{productId}   </if>
+		</where>
+
+	</delete>
+
+
+
+</mapper>

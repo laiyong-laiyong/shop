@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.workOrder.mapper.WorkOrderMapper">
+
+	
+	
+	
+	
+	
+	
+	<select id="list" resultMap="workOrderList">
+		
+		<include refid="selectSql"></include>
+		<include refid="whereSql"></include>
+	</select>
+	
+	<sql id="whereSql">
+	  <where>
+				<if test="name != null and name != ''"> and t.name like CONCAT('%',#{name},'%')  </if>
+				
+				<if test="category != null"> 
+					<if test="category.name != null and category.name != ''"> and pc.name like CONCAT('%',#{category.name},'%')  </if>
+				</if>
+				<if test="uuid != null and uuid != ''"> and t.uuid = #{uuid} </if>
+				<if test="createUserCode != null and createUserCode != ''"> and t.createUserCode = #{createUserCode} </if>
+				<if test="siteCode != null and siteCode != ''"> and t.siteCode = #{siteCode} </if>
+				<if test="handlerCode != null and handlerCode != ''"> and t.handlerCode like CONCAT('%',#{handlerCode},'%')  </if>
+				<if test="state != null and state != ''"> and t.state = #{state} </if>
+				<if test="deleteFlag != null"> and t.deleteFlag = #{deleteFlag} </if>
+				<if test="startDate != null"><![CDATA[ and #{startDate} <= t.createDate ]]></if>
+				<if test="endDate != null"><![CDATA[ and #{endDate} >= t.createDate ]]></if>
+	 </where>
+	 order by t.createDate desc
+	</sql>
+	
+	
+	<select id="page" resultMap="workOrderList" parameterType="com.sobey.module.workOrder.model.WorkOrder">
+		
+		<include refid="selectSql"></include>
+		<include refid="whereSql"></include>
+	</select>
+	
+	
+	<sql id="selectSql">
+	select
+			t.uuid,
+			t.name,
+			t.categoryId,
+			t.desc,
+			t.createDate,
+			t.updateDate,
+	        t.state,
+			t.mediaDir,
+	        t.email,
+	        t.telephone,
+	        t.level,
+	        t.mediaId,
+	        t.handlerCode,
+	        t.createUserCode,
+	        t.evaluate,
+	        t.closeDate,
+	        t.productId,
+	        t.contactStartTime,
+	        t.contactEndTime,
+	        t.deleteFlag,
+	        t.siteCode,
+			pc.uuid as ctUuid,
+			pc.name as ctName,
+			pc.desc as ctDesc,
+			pc.parentId
+		from mall_work_order t
+		left join mall_work_order_category pc on t.categoryId =  pc.uuid
+	</sql>
+	
+	
+	<resultMap id="workOrderList" type="com.sobey.module.workOrder.model.WorkOrder" >
+		<id property="uuid" column="uuid"/>
+		<result property="name" column="name"/>
+		<result property="categoryId" column="categoryId"/>
+		<result property="desc" column="desc"/>
+		<result property="state" column="state"/>
+		<result property="createDate" column="createDate"/>
+		<result property="updateDate" column="updateDate"/>
+		<result property="email" column="email"/>
+		<result property="mediaDir" column="mediaDir"/>
+		<result property="telephone" column="telephone"/>
+		<result property="mediaId" column="mediaId"/>
+		<result property="level" column="level"/>
+		<result property="handlerCode" column="handlerCode"/>
+		<result property="createUserCode" column="createUserCode"/>
+		<result property="evaluate" column="evaluate"/>
+		<result property="closeDate" column="closeDate"/>
+		<result property="productId" column="productId"/>
+		<result property="contactStartTime" column="contactStartTime"/>
+		<result property="contactEndTime" column="contactEndTime"/>
+		<result property="deleteFlag" column="deleteFlag"/>
+		<result property="siteCode" column="siteCode"/>
+		
+		<association property="category"  resultMap="category">
+		</association>
+		
+	</resultMap>
+	
+	
+	<resultMap id="category" type="com.sobey.module.workOrdercategory.model.Category" >
+		<id property="uuid" column="ctUuid"/>
+		<result property="name" column="ctName"/>
+		<result property="desc" column="ctDesc"/>
+		<result property="parentId" column="parentId"/>
+	</resultMap>
+	
+	
+	<select id="statistic" resultType="java.util.HashMap">
+		select
+			t.state as state,
+			count(t.state) as number
+		from mall_work_order t group by t.state
+		<include refid="whereSql"></include>
+	</select>
+	
+	
+	
+</mapper>

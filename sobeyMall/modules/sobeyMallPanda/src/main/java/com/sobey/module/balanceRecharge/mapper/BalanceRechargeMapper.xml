@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.balanceRecharge.mapper.BalanceRechargeMapper">
+<select id="page"
+        resultType="com.sobey.module.balanceRecharge.model.BalanceRecharge"
+        parameterType="com.sobey.module.balanceRecharge.model.BalanceRecharge"
+        >
+        select * from mall_balance_recharge
+        <where>
+                <if test="account != null and account != ''">and account like CONCAT('%',#{account},'%') </if>
+                <if test="way != null and way != ''">and way like CONCAT('%',#{way},'%') </if>
+                <if test="lingYunAc != null and lingYunAc != ''">and lingYunAc like CONCAT('%',#{lingYunAc},'%') </if>
+                <if test="projectId != null and projectId != ''">and projectId like CONCAT('%',#{projectId},'%') </if>
+                <if test="recharges != null and recharges.size()>0">and recharge in
+                        <foreach collection="recharges" item="rStep" index="index" open="(" close=")" separator=",">
+                              #{rStep}
+                        </foreach> </if>
+                <if test="checkFlags != null and checkFlags.size()>0">and checkFlag in
+                        <foreach collection="checkFlags" item="cStep" index="index" open="(" close=")" separator=",">
+                                #{cStep}
+                        </foreach>
+                </if>
+        </where>
+        order by createDate desc
+</select>
+
+
+        <select id="getOne"
+                resultType="com.sobey.module.balanceRecharge.model.BalanceRecharge"
+                parameterType="com.sobey.module.balanceRecharge.model.BalanceRecharge">
+
+                select projectId,lingYunAc,backMs,shellId,checkName FROM mall_balance_recharge
+                where id = #{id}
+        </select>
+
+        <select id="list"
+                resultType="com.sobey.module.balanceRecharge.model.BalanceRecharge"
+                parameterType="com.sobey.module.balanceRecharge.model.BalanceRecharge">
+
+                select * FROM mall_balance_recharge
+                <where>
+                        <if test="account != null and account != ''">and account like CONCAT('%',#{account},'%') </if>
+                        <if test="way != null and way != ''">and way like CONCAT('%',#{way},'%') </if>
+                        <if test="lingYunAc != null and lingYunAc != ''">and lingYunAc like CONCAT('%',#{lingYunAc},'%') </if>
+                        <if test="projectId != null and projectId != ''">and projectId like CONCAT('%',#{projectId},'%') </if>
+                        <if test="recharges != null and recharges.size()>0">and recharge in
+                                <foreach collection="recharges" item="rStep" index="index" open="(" close=")" separator=",">
+                                        #{rStep}
+                                </foreach> </if>
+                        <if test="checkFlags != null and checkFlags.size()>0">and checkFlag in
+                                <foreach collection="checkFlags" item="cStep" index="index" open="(" close=")" separator=",">
+                                        #{cStep}
+                                </foreach>
+                        </if>
+                </where>
+        </select>
+
+
+
+
+</mapper>

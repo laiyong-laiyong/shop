@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.bill.mapper.PersonalBillMapper">
+
+    <select id="personalBill" resultType="com.sobey.module.bill.model.PersonalBill">
+        select
+        *
+        from
+        mall_personal_bill
+        where
+        billDate = #{billDate}
+        and
+        accountId = #{accountId}
+        and
+        siteCode = #{siteCode}
+    </select>
+    <insert id="batchSave" parameterType="com.sobey.module.bill.model.PersonalBill">
+        insert into
+        mall_personal_bill
+        (uuid,siteCode,accountId,account,saleAccountId,totalAmount,balAmount,wxAmount,zfbAmount,voucherAmount,
+        refundTotalAmount,balRefundTotalAmount,wxRefundAmount,zfbRefundAmount,limPriAmount,billDate,createDate)
+        values
+        <foreach collection="list" item="pb" separator=",">
+            (#{pb.uuid},#{pb.siteCode},#{pb.accountId},#{pb.account},#{pb.saleAccountId},#{pb.totalAmount},#{pb.balAmount},
+            #{pb.wxAmount},#{pb.zfbAmount},#{pb.voucherAmount},#{pb.refundTotalAmount},
+            #{pb.balRefundTotalAmount},#{pb.wxRefundAmount},#{pb.zfbRefundAmount},#{pb.limPriAmount},
+            #{pb.billDate},#{pb.createDate})
+        </foreach>
+    </insert>
+<!--    个人消费趋势查询，不查限价-->
+    <select id="consumeTrend" resultType="com.sobey.module.bill.model.PersonalBill">
+        select
+        uuid,siteCode,accountId,account,saleAccountId,totalAmount,balAmount,wxAmount,zfbAmount,voucherAmount,
+        refundTotalAmount,balRefundTotalAmount,wxRefundAmount,zfbRefundAmount,billDate,createDate
+        from
+        mall_personal_bill
+        where
+        <![CDATA[
+        STR_TO_DATE(billDate,"%Y/%m") >= STR_TO_DATE(#{start},"%Y/%m")
+        and
+        STR_TO_DATE(billDate,"%Y/%m") <= STR_TO_DATE(#{end},"%Y/%m")
+        ]]>
+        and
+        accountId = #{accountId}
+        and
+        siteCode = #{siteCode}
+        order by STR_TO_DATE(billDate,"%Y/%m") asc
+    </select>
+    <select id="consumeOverview" resultType="com.sobey.module.bill.model.PersonalBill">
+        select
+        sum(totalAmount) as totalAmount,sum(balAmount) as balAmount,
+        sum(wxAmount) as wxAmount, sum(zfbAmount) as zfbAmount,sum(voucherAmount) as voucherAmount,
+        sum(refundTotalAmount) as refundTotalAmount,sum(balRefundTotalAmount) as balRefundTotalAmount,
+        sum(wxRefundAmount) as wxRefundAmount,sum(zfbRefundAmount) as zfbRefundAmount,
+        sum(limPriAmount) as limPriAmount,billDate
+        from
+        mall_personal_bill
+        <where>
+            <if test="accountId != null and accountId != ''"> and accountId = #{accountId}</if>
+            <if test="siteCode != null and siteCode != ''"> and siteCode = #{siteCode}</if>
+            and
+            billDate = #{billDate}
+        </where>
+    </select>
+    <select id="consumeRank" resultType="com.sobey.module.bill.model.PersonalBill">
+        select
+        *
+        from
+        mall_personal_bill mpb
+        where
+        (
+            mpb.uuid in (select personalBillUuid from mall_bill_detail where billUuid=#{uuid})
+        )
+        order by totalAmount desc
+        limit 0,10
+    </select>
+
+    <select id="monthSales" resultType="com.sobey.module.bill.model.PersonalBill">
+        select
+        sum(totalAmount) as totalAmount,sum(limPriAmount) as limPriAmount,
+        sum(voucherAmount) as voucherAmount,billDate
+        from
+        mall_personal_bill
+        where
+        saleAccountId = #{saleUserCode}
+        and
+        billDate = #{date}
+        group by
+        billDate
+    </select>
+    <select id="perMonthSales" resultType="com.sobey.module.bill.model.PersonalBill">
+        select
+        sum(totalAmount) as totalAmount,sum(limPriAmount) as limPriAmount,
+        sum(voucherAmount) as voucherAmount,billDate
+        from
+        mall_personal_bill
+        where
+        saleAccountId = #{saleUserCode}
+        and
+        <![CDATA[
+        STR_TO_DATE(billDate,"%Y/%m") >= STR_TO_DATE(#{start},"%Y/%m")
+        and
+        STR_TO_DATE(billDate,"%Y/%m") <= STR_TO_DATE(#{end},"%Y/%m")
+        ]]>
+        group by
+        billDate
+    </select>
+
+    <select id="customerConsumeRank" resultType="com.sobey.module.bill.model.PersonalBill">
+        select
+        accountId,account,sum(totalAmount) as totalAmount,sum(balAmount) as balAmount,
+        sum(wxAmount) as wxAmount, sum(zfbAmount) as zfbAmount,sum(voucherAmount) as voucherAmount,
+        sum(refundTotalAmount) as refundTotalAmount,sum(balRefundTotalAmount) as balRefundTotalAmount,
+        sum(wxRefundAmount) as wxRefundAmount,sum(zfbRefundAmount) as zfbRefundAmount,
+        sum(limPriAmount) as limPriAmount
+        from
+        mall_personal_bill
+        where
+        saleAccountId = #{saleUserCode}
+        group by
+        accountId,account
+    </select>
+    <select id="findUserCodes" resultType="string">
+        select
+        distinct(accountId)
+        from
+        mall_personal_bill
+        where
+        saleAccountId = #{saleUserCode}
+        and
+        billDate = #{billDate}
+    </select>
+</mapper>

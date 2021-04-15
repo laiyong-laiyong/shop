@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.dialogue.mapper.DialogueMapper">
+
+
+	<sql id="selectSql">
+		select *
+		from mall_work_order_dialogue mp
+	</sql>
+
+	<sql id="whereSql">
+		<where>
+			<if test="uuid != null and uuid != ''"> and mp.uuid = #{uuid} </if>
+			<if test="workOrderId != null and workOrderId != ''"> and mp.workOrderId = #{workOrderId} </if>
+		</where>
+		order by mp.createDate asc
+	</sql>
+
+
+	<select id="page"
+		resultType="com.sobey.module.dialogue.model.Dialogue"
+		parameterType="com.sobey.module.dialogue.model.Dialogue">
+
+		<include refid="selectSql"></include>
+		<include refid="whereSql"></include>
+	</select>
+
+	<select id="list"
+		resultType="com.sobey.module.dialogue.model.Dialogue">
+
+		<include refid="selectSql"></include>
+		<include refid="whereSql"></include>
+	</select>
+
+
+
+
+
+
+</mapper>

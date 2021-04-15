@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.mallPack.mapper.MallPackMapper">
+
+    <select id="list" parameterType="com.sobey.module.mallPack.model.MallPack"
+            resultType="com.sobey.module.mallPack.model.MallPack">
+        select * from mall_pack
+        <where>
+            <if test="account != null and account != ''">and account like concat('%',#{account},'%')</if>
+            <if test="accountId != null and accountId != ''">and accountId = #{accountId}</if>
+            <if test="siteCode != null and siteCode != ''">and siteCode = #{siteCode}</if>
+            <if test="productId != null and productId != ''">and productId = #{productId}</if>
+            <if test="isEffective != null and isEffective != ''">and isEffective = #{isEffective}</if>
+            <if test="effectiveDate != null">and DATE_FORMAT(effectiveDate,'%Y-%m-%d') =
+                DATE_FORMAT(#{effectiveDate},'%Y-%m-%d')
+            </if>
+            <if test="packName != null and packName != ''">and packName like concat('%',#{packName},'%')</if>
+        </where>
+        order by createDate desc
+    </select>
+
+</mapper>

@@ -1,0 +1,22 @@
+#需要在华为云配置项中创建的配置 除了以下还需要引入url的基础配置
+data:
+  #mongo相关
+  mall.mongo.username: ''
+  mall.mongo.password: ''
+  #url格式 10.60.0.4:8635,10.60.0.93:8635
+  mall.mongo.url: ''
+  #mysql ip:port
+  mall.mysql.url: ''
+  #mysql 用户名
+  mall.mysql.username: ''
+  #mysql 密码
+  mall.mysql.password: ''
+  #rabbitmq相关
+  mall.rabbit.host: ''
+  mall.rabbit.port: ''
+  mall.rabbit.username: ''
+  mall.rabbit.password: ''
+  #redis相关
+  mall.redis.host: ''
+  mall.redis.port: ''
+  mall.redis.password: ''

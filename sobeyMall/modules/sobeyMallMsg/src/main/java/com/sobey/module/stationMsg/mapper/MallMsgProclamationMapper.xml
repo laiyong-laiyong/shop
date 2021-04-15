@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.stationMsg.mapper.MallMsgProclamationMapper">
+
+    <select id="pages" resultMap="selectNoContent">
+        SELECT uuid,title,typeCode,typeDesc,publishStatus,promotes,publishTime,createTime  FROM mall_msg_proclamation
+        <where>
+            <if test="entity != null">
+                <if test="entity.uuid != null and entity.uuid != ''">and uuid = #{entity.uuid}</if>
+                <if test="entity.publishStatus != null and entity.publishStatus != ''">and publishStatus = #{entity.publishStatus}</if>
+                <if test="entity.typeCode != null and entity.typeCode != ''">and typeCode = #{entity.typeCode}</if>
+            </if>
+        </where>
+        order by createTime desc
+    </select>
+
+    <update id="updatePublishStatus">
+        update mall_msg_proclamation set publishStatus = #{status},updateTime=#{updateTime}
+        <if test="publishTime != null">,publishTime=#{publishTime}</if>
+        where uuid in (
+        <foreach collection="uuids" item="uuid" separator=",">
+            #{uuid}
+        </foreach>
+        )
+    </update>
+    
+    <!--这里查询列表不查询公告内容因为base64编码太长影响查询速度-->
+    <resultMap id="selectNoContent" type="com.sobey.module.stationMsg.model.MallMsgProclamation" >
+       <id property="uuid" column="uuid"/>
+       <result property="title" column="title"/>
+       <result property="typeCode" column="typeCode"/>
+       <result property="typeDesc" column="typeDesc"/>
+       <result property="publishStatus" column="publishStatus"/>
+       <result property="promotes" column="promotes"/>
+       <result property="publishTime" column="publishTime"/>
+       <result property="createTime" column="createTime"/>
+    </resultMap>
+
+</mapper>

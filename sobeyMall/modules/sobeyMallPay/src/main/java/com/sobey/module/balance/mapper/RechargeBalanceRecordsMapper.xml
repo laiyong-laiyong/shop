@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.balance.mapper.RechargeBalanceRecordsMapper">
+
+    <select id="pages" parameterType="com.sobey.module.balance.entity.QueryRechargeBalanceParam" resultType="com.sobey.module.balance.model.RechargeBalanceRecords">
+
+        select * from mall_recharge_balance_records
+        <where>
+            <if test="param != null">
+                <if test="param.uuid != '' and param.uuid != null"> and uuid = #{param.uuid}</if>
+                <if test="param.accountId != '' and param.accountId != null"> and accountId = #{param.accountId}</if>
+                <if test="param.account != '' and param.account != null"> and account like concat('%',#{param.account},'%')</if>
+                <if test="param.client != '' and param.client != null"> and client like concat('%',#{param.client},'%')</if>
+                <if test="param.seller != '' and param.seller != null"> and seller like concat('%',#{param.seller},'%')</if>
+                <if test="param.contractNo != '' and param.contractNo != null"> and contractNo like concat('%',#{param.contractNo},'%')</if>
+            </if>
+        </where>
+        order by rechargeTime desc
+    </select>
+
+</mapper>

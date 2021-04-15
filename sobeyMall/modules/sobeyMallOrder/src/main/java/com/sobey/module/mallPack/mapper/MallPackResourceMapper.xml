@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.mallPack.mapper.MallPackResourceMapper">
+
+    <insert id="batchSave">
+        insert into mall_pack_resource (uuid,resourceId,resourceName,mallPackId,optionId,optionName,metricId,size,remainingSize,sizeUnit,price,createDate,updateDate,expireDate) values
+        <foreach collection="resources" item="resource" separator=",">
+            (#{resource.uuid},#{resource.resourceId},#{resource.resourceName},#{resource.mallPackId},#{resource.optionId},#{resource.optionName},
+            #{resource.metricId},#{resource.size},#{resource.remainingSize},#{resource.sizeUnit},
+            #{resource.price},#{resource.createDate},#{resource.updateDate},#{resource.expireDate})
+        </foreach>
+    </insert>
+
+    <select id="count" resultType="int">
+        select count(1) from mall_pack_resource
+        <where>
+            <if test="resName != null and resName != ''"> and resourceName like CONCAT('%',#{resName},'%')</if>
+            and mallPackId in (
+            <foreach collection="ids" item="id" separator=",">
+                #{id}
+            </foreach>
+            )
+        </where>
+    </select>
+
+    <select id="manualPages" resultType="com.sobey.module.mallPack.model.MallPackResource">
+        select * from mall_pack_resource
+        <where>
+            <if test="resName != null and resName != ''"> and resourceName like CONCAT('%',#{resName},'%')</if>
+            and mallPackId in (
+            <foreach collection="ids" item="id" separator=",">
+                #{id}
+            </foreach>
+            )
+        </where>
+        order by createDate desc
+        limit #{startIndex},#{pageSize}
+    </select>
+
+<!--    <select id="queryEffective" resultType="com.sobey.module.mallPack.model.MallPackResource">-->
+<!--        select * from mall_pack_resource where mallPackId in-->
+<!--        (-->
+<!--        select uuid from mall_pack where-->
+<!--        accountId=#{accountId} and-->
+<!--        productId = #{productId} and-->
+<!--        <![CDATA[expireDate > #{nowDate}]]> and-->
+<!--        isEffective = '1'-->
+<!--        )-->
+<!--        order by expireDate asc for update-->
+<!--    </select>-->
+
+    <select id="statisticEffective" resultType="com.sobey.module.mallPack.model.MallPackResource">
+        select
+        uuid,resourceId,resourceName,optionId,optionName,mallPackId,metricId,sum(`size`) as `size`,sum(remainingSize) as remainingSize,sizeUnit,createDate,updateDate,expireDate
+        from
+        mall_pack_resource
+        where
+        mallPackId
+        in
+        (
+        select uuid from mall_pack where
+        accountId=#{accountId} and
+        productId = #{productId} and
+        <![CDATA[expireDate > #{nowDate}]]> and
+        isEffective = '1'
+        )
+        group by
+        metricId
+    </select>
+
+    <select id="queryEffectiveByMetricId" resultType="com.sobey.module.mallPack.model.MallPackResource">
+
+         select * from mall_pack_resource where mallPackId in
+        (
+        select uuid from mall_pack where
+        accountId=#{accountId} and
+        productId = #{productId} and
+        <![CDATA[expireDate > #{nowDate}]]> and
+        isEffective = '1'
+        )
+        and
+        metricId=#{metricId}
+        order by expireDate asc for update
+
+    </select>
+
+</mapper>

@@ -1,0 +1,23 @@
+#现在使用华为云的环境变量，不在需要这个bootstrap.yml
+#C此文件是为了将springboot项目放入到k8s中，读取其中的配置的。本地测试不要此文件，请将此文件重命名,即可正确启动
+spring:
+  application:
+    name: sobey-mall-product2
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        mode: event
+      config:
+        name: mall-product-config
+        namespace: default
+        sources:
+        - name: mall-product-config
+      client:
+        namespace: default   
+
+
+management:
+     endpoint:
+        restart:
+           enabled: true

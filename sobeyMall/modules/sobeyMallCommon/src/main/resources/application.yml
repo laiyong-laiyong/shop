@@ -1,0 +1,169 @@
+server:
+  #address: 172.16.135.70
+  #C端口
+  port: 8080
+  #C上下文路径
+  servlet:
+    context-path: /sobeyMallCommon
+  #C内置tomcat编码
+  tomcat:
+    uri-encoding: UTF-8
+    connection-timeout: 180000
+
+
+spring:
+  profiles:
+    include:
+    - mybatisdao
+    active: prod
+  #这里允许feign的name覆盖
+  main:
+    allow-bean-definition-overriding: true  
+  aop:
+    proxy-target-class: true  #Cfalse为启用jdk默认动态代理,true为cglib动态代理
+  #设置上传文件属性
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  #这里设置访问图片路径    
+  mvc:
+    static-path-pattern: /media/**
+  resources:
+    #static-locations: file:D:/sobeyMall/media
+    static-locations: file:/sobeyMall/media,classpath:/static/
+  http:
+    encoding:
+      force: true
+      enabled: true
+      charset: UTF-8
+    converters:
+      preferred-json-mapper: jackson
+  
+          
+
+
+
+   
+    
+    
+ 
+login:
+     username: admin
+     password: sobey
+
+
+
+#C接口时间
+#C方法(接口)签名时间,时间分钟
+token:
+    time:
+       method: 120
+#C是否开启播放路径签名
+       playPathEnable: true
+#C播放路径签名时间,时间分钟
+       playPath: 120
+
+#hive配置
+hive:
+    ip: 182.151.53.14
+    port: 88
+    username: admin
+    password: Sobeyhive-2016
+    site: S1
+    sobeyHiveSystem: SobeyHive
+    system: SobeyHive  
+
+httpclient:
+         maxTotal: 50
+         defaultMaxPerRoute: 100
+         connectTimeout: 15000
+         connectionRequestTimeout: 10000
+         socketTimeout: 30000
+         reTryCount: 3
+
+#C缓存过期时间
+expiration:
+    time: 15
+    #C可选参数,minutes,hours,days,默认days。
+    unit: days
+
+    
+
+
+#设置feign发请求的日志级别
+logging:
+  level:
+    com.sobey.*: info
+
+feign:
+  httpclient:
+    enabled: true
+    connection-timeout: 10000
+
+#获取token时的基础认证    
+auth:
+   token: Basic YWRtaW46JDBiRXlIaXZlJjJvMVNpeA==
+   grant_type: client_credentials
+   client_id: Lingyun_mall
+   client_secret: ab8121dd29a04ce0bc3db828e6f3d20a
+
+#feign调用的配置
+address:
+   #后台管理
+   manage:
+     name: manage
+     url: ${manageUrl:http://sobey-mall-manage.default:80/sobeyMallManage}
+   #认证中心  
+   auth:
+     name: auth
+     #url: https://authentication.sobeylingyun.com
+     url: ${authUrl:http://sc-auth-service.content-platform:80}
+
+   #订单
+   order:
+     name: order
+     #url: http://114.116.255.147:32216/sobeyMallOrder
+     url: ${orderUrl:http://sobey-mall-order.default:80/sobeyMallOrder}
+   #商品
+   product:
+     name: product
+     #url: http://114.116.255.147:12345/sobeyMallProduct
+     url: ${productUrl:http://sobey-mall-product.default:80/sobeyMallProduct}
+   #支付
+   pay:
+     name: pay
+     #url: http://114.116.255.147:32217/sobeyMallPay
+     url: ${payUrl:http://sobey-mall-pay.default:80/sobeyMallPay}
+   #消息
+   msg:
+     name: msg
+     #url: http://114.116.255.147:32218/sobeyMallMsg
+     url: ${msgUrl:http://sobey-mall-msg.default:80/sobeyMallMsg}
+   hivemessage:
+     name: hivemessage
+     url: ${hiveMessageUrl:http://sc-message-service.content-platform:80}
+   hiveprocess:
+     name: hiveprocess
+     url: ${hiveProcessUrl:http://sc-flow-service.content-platform:80}     
+     
+     
+     
+   
+#api 版本控制   
+api:
+   v1: V1  
+
+#上载文件存储路径
+upload:
+   #path: D:/sobeyMall/media   
+   path: /sobeyMall/media
+
+#生成appId的key需要的seed
+app-id:
+  seed: sobyeLingYunMallAuth
+  
+ 
+
+
+  

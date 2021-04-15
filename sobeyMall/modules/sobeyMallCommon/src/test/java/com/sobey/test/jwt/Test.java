@@ -1,0 +1,45 @@
+package com.sobey.test.jwt;
+
+import com.alibaba.fastjson.JSON;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.sobey.framework.jwt.model.Token;
+import com.sobey.util.common.date.DateKit;
+import com.sobey.util.common.json.JsonKit;
+import com.sobey.util.common.jwt.JwtUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.security.jwt.Jwt;
+import org.springframework.security.jwt.JwtHelper;
+
+public class Test {
+
+	@org.junit.Test
+	public void jwtTest() throws Exception {
+	    Map<String, String> map = new HashMap<>();
+	    map.put("code", "1");
+	    map.put("name", "lgc");
+	    String token = JwtUtils.createToken(map);
+	    System.out.println(token);
+//	    DecodedJWT decode = JWT.decode("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZmljdXMiXSwidXNlcl9pbmZvIjp7InNpdGUiOiJTMSIsInVzZXJJZCI6IjEiLCJsb2dpbk5hbWUiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJ1c2VyQ29kZSI6ImFkbWluIiwibmlja05hbWUiOiJhZG1pbiIsImRlc2NyaXB0aW9uIjpudWxsLCJhdmF0YXIiOm51bGwsInBob25lIjoiMTM4MDAxMzgwMDAiLCJwYXNzd29yZCI6bnVsbCwicm9sZXMiOlsiUk9MRV9hZG1pbiJdLCJjb250ZW50UHJpdmlsZWdlcyI6WyJ0ZW1wbGF0ZV9qdWVtaToqIiwicHVibGljOioiLCJ0ZW1wbGF0ZV9qaW1pOioiLCJ0ZW1wbGF0ZV9taW1pOioiLCJBbm9ueW1vdXM6KiJdLCJwZXJtaXNzaW9ucyI6WyJ1c2VyTWFuYWdlbWVudDoqOioiXSwicmVsYXRpb25JZHMiOm51bGwsImV4dGVuZCI6bnVsbCwiY2xpZW50Q29kZXMiOlsiY2xpZW50XzEiLCJhZG1pbiIsInVzZXJDZW50ZXIiXSwiZGlzYWJsZSI6ZmFsc2UsInVzZWRMb2dpblR5cGUiOiJwYXNzd29yZCIsImVuYWJsZWQiOnRydWUsImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhY2NvdW50Tm9uTG9ja2VkIjp0cnVlLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX2FkbWluIn1dfSwidXNlcl9uYW1lIjoiYWRtaW4iLCJzY29wZSI6WyJhbGwiXSwiZXhwIjoxNTgyMDg1MjE5LCJhdXRob3JpdGllcyI6WyJST0xFX2FkbWluIl0sImp0aSI6IjVkYTg3MzRmLWU0ZmQtNDkzMS1hMDE4LWNjN2M0Zjg0Njc3MyIsImNsaWVudF9pZCI6ImFkbWluIn0.01Kp18XSTNwGEIehRKNnbepPV66_5auR1BOALq2VGaE");
+//	    System.out.println(decode.getClaims());
+//	    Map<String, String> res = JwtUtils.verifyToken(token);
+//	    System.out.println(JSON.toJSONString(res));
+	    
+	    Jwt decode2 = JwtHelper.decode("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiaGl2ZSJdLCJ1c2VyX2luZm8iOnsic2l0ZSI6InNvYmV5TGluZ1l1bk1hbGwiLCJ1c2VySWQiOiIzMDAwNiIsImxvZ2luTmFtZSI6ImZlbmdoYW8iLCJ1c2VybmFtZSI6ImZlbmdoYW8iLCJ1c2VyQ29kZSI6ImJiODkxODBiZTY1YTRiNzU5OTExMzkxM2Q5YzhhMjI5IiwidXNlclR5cGUiOm51bGwsImVtYWlsIjoiMzQ3ODUyMzM1QHFxLmNvbSIsIm5pY2tOYW1lIjpudWxsLCJkZXNjcmlwdGlvbiI6InNhZOiIkuacjeaSkuS4iuWkp-S6i-WPkeeUn-eahOi6q-S7vemhuumhuuW9k-W9kyIsImF2YXRhciI6bnVsbCwicGhvbmUiOiIxODA4MDE4MDg4MCIsInBhc3N3b3JkIjpudWxsLCJleHRlbmQiOnsiY29udGFjdEVtYWlsIjoic2ZzZGZzQHFxLmNvbSIsInRyYWRlSW5mbyI6IuS6kuiBlOe9keWqkuS9kyIsImNvbnRhY3RQZXJzb24iOiLmmK_nmoTouqvku70iLCJjb250YWN0UGhvbmUiOiIxODA4MDE4MDg4MCJ9LCJyb2xlcyI6WyJSN1I0Z05peDBCQzNUaVRHRzQyQW1pNHN6V2hIVms0VyIsIk9lR0YxRW45b0JQN090UWhGdXBQZU9qdW9EV3lFdmczIiwiNXNHcXVvZDdzUjlxMExOVGtLSjRnVHN5bHpDdU91cEEiLCJnbWE5dUxVR0xWNnNrT2dlNVhueDdiZXhZRFVjaUhyaSJdLCJjb250ZW50UHJpdmlsZWdlcyI6WyJwcml2YXRlX2JiODkxODBiZTY1YTRiNzU5OTExMzkxM2Q5YzhhMjI5OioiLCJwdWJsaWNfUzE6KiIsIkFub255bW91czoqIl0sInBlcm1pc3Npb25zIjpbImVmMDkyZmU0OGRjZTRlMTNiZjc0NzYwMzBmY2Q5NmY2NjE6KjoqIl0sImdyb3VwcyI6bnVsbCwib3JnYW5pemF0aW9ucyI6W3sic2l0ZUNvZGUiOiJzb2JleUxpbmdZdW5NYWxsIiwic2l0ZU5hbWUiOm51bGwsImlkIjoyLCJvcmdhbml6YXRpb25Db2RlIjoic29iZXlNYWxsT3JnIiwib3JnYW5pemF0aW9uTmFtZSI6Iue0oui0neWHjOS6keWVhuWfjuaguee7hOe7hyIsImRlc2NyaXB0aW9uIjoi57Si6LSd5YeM5LqR5ZWG5Z-O5qC557uE57uHIiwicGFyZW50SWQiOjAsInBhcmVudE9yZ2FuaXphdGlvbiI6bnVsbCwib3BlcmF0ZSI6MCwiZXh0ZW5kQXR0cmlidXRlcyI6bnVsbCwiZXh0ZXJuYWxDb2RlIjpudWxsfV0sInJlbGF0aW9uSWRzIjpudWxsLCJjbGllbnRDb2RlcyI6bnVsbCwibG9ja2VkIjpmYWxzZSwiZGlzYWJsZSI6ZmFsc2UsInVzZWRMb2dpblR5cGUiOm51bGwsImJvdW5kVHBhdXRoVHlwZXMiOltdLCJyb290VXNlciI6dHJ1ZSwicGFyZW50Q29kZSI6InJvb3QtY29kZS1hZG1pbiIsImluaXRpYWxpemVkIjp0cnVlLCJhZG1pbiI6ZmFsc2V9LCJncmFudF90eXBlIjoicGFzc3dvcmQiLCJ1c2VyX25hbWUiOiJmZW5naGFvIiwic2NvcGUiOlsiYWxsIl0sImV4cCI6MTU5NDE4NDQ1MiwiYXV0aG9yaXRpZXMiOlsiUjdSNGdOaXgwQkMzVGlUR0c0MkFtaTRzeldoSFZrNFciLCJPZUdGMUVuOW9CUDdPdFFoRnVwUGVPanVvRFd5RXZnMyIsIjVzR3F1b2Q3c1I5cTBMTlRrS0o0Z1RzeWx6Q3VPdXBBIiwiZ21hOXVMVUdMVjZza09nZTVYbng3YmV4WURVY2lIcmkiXSwianRpIjoiZGRmM2FjZjEtMDBkZS00YmY3LWE3MDctMDhiZWVmZDZjNjQ0IiwiY2xpZW50X2lkIjoiYWRtaW4ifQ.Atm0EyH-NShVjZzuM8E4w3TA1vaxsrqZVGf5zytxbgY");
+	    Token bean = JsonKit.jsonToBean(decode2.getClaims(), Token.class);
+	    
+	    System.out.println(decode2.getClaims());
+	    Long exp = bean.getExp();
+	    System.out.println(bean.getExp());
+	    String time = DateKit.getTime(exp*1000);
+	    System.out.println(time);
+	    Long diffMinute = DateKit.getDiffMinute(exp*1000);
+	    System.out.println(diffMinute);
+	}
+
+
+}

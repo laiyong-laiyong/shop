@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.versionCustom.mapper.VersionCustomMapper">
+
+	
+	<delete id="remove">
+		delete from mall_product_version_custom
+		<where>
+			<if test="uuid != null and uuid != ''"> and uuid = #{uuid} </if>
+			<if test="versionId != null and versionId != ''"> and versionId = #{versionId}   </if>
+		</where>
+
+	</delete>
+	
+	
+	
+	
+</mapper>

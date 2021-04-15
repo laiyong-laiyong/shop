@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.version.mapper.VersionMapper">
+
+	<select id="page" resultType="com.sobey.module.version.model.Version" parameterType="com.sobey.module.version.model.Version">
+		select * from mall_product_version vs
+		<include refid="whereSql"></include>
+		order by vs.order asc
+	</select>
+	
+	
+	
+	
+	
+	<sql id="whereSql">
+	  <where>
+				<if test="name != null and name != ''"> and vs.name like CONCAT('%',#{name},'%')  </if>
+				
+				<if test="uuid != null and uuid != ''"> and vs.uuid = #{uuid} </if>
+				<if test="productId != null and productId != ''"> and vs.productId = #{productId} </if>
+				<if test="code != null and code != ''"> and vs.code = #{code} </if>
+				<if test="startDate != null and startDate != ''"><![CDATA[ and #{startDate} <= createDate ]]></if>
+				<if test="endDate != null and endDate != ''"><![CDATA[ and #{endDate} >= createDate ]]></if>
+	 </where>
+	</sql>
+	
+	
+	<select id="list" resultMap="versionList">
+		
+		select
+			vs.uuid as vsUuid,
+            vs.`name` as vsName,
+			vs.priceMonth as vsPriceMonth,
+			vs.priceYear as vsPriceYear,
+			vs.priceDay as vsPriceDay,
+			vs.limitedPriceMonth as vsLimitedPriceMonth,
+			vs.limitedPriceYear as vsLimitedPriceYear,
+			vs.limitedPriceDay as vsLimitedPriceDay,
+			vs.productId,
+			vs.code,
+			vs.hide as vsHide,
+			vs.`desc` as vsDesc,
+			vs.`order` as vsOrder,
+			ct.uuid as customUuid,
+            ct.`name` as customName,
+			ct.`enable` as 'enable',
+			ct.versionId as versionId,
+			ct.`order` as customOrder,
+			ct.hide as customHide,
+			opt.uuid as optUuid,
+            opt.`name` as optName,
+			opt.priceMonth as optPriceMonth,
+			opt.priceYear as optPriceYear,
+			opt.priceDay as optPriceDay,
+			opt.limitedPriceMonth as optLimitedPriceMonth,
+			opt.limitedPriceYear as optLimitedPriceYear,
+			opt.limitedPriceDay as optLimitedPriceDay,
+			opt.`order` as optOrder,
+			opt.hide as optHide,
+			opt.customId as customId
+		from mall_product_version vs 
+	    LEFT JOIN mall_product_version_custom ct on ct.versionId = vs.uuid
+	    LEFT JOIN mall_product_version_custom_option opt on opt.customId = ct.uuid
+		<include refid="whereSql"></include>
+		order by vs.`order`,ct.`order`,opt.`order`
+	</select>
+	
+	
+	
+	<resultMap id="versionList" type="com.sobey.module.version.model.Version" >
+		<id property="uuid" column="vsUuid"/>
+		<result property="name" column="vsName"/>
+		<result property="desc" column="vsDesc"/>
+		<result property="productId" column="productId"/>
+		<result property="code" column="code"/>
+		<result property="priceMonth" column="vsPriceMonth"/>
+		<result property="priceYear" column="vsPriceYear"/>
+		<result property="priceDay" column="vsPriceDay"/>
+		<result property="limitedPriceMonth" column="vsLimitedPriceMonth"/>
+		<result property="limitedPriceYear" column="vsLimitedPriceYear"/>
+		<result property="limitedPriceDay" column="vsLimitedPriceDay"/>
+		<result property="productId" column="productId"/>
+		<result property="order" column="vsOrder"/>
+		<result property="hide" column="vsHide"/>
+		<collection property="customs"  resultMap="customs" ></collection>
+	</resultMap>
+	
+	
+	<resultMap id="customs" type="com.sobey.module.versionCustom.model.VersionCustom" >
+		<id property="uuid" column="customUuid"/>
+		<result property="name" column="customName"/>
+		<result property="enable" column="enable"/>
+		<result property="versionId" column="versionId"/>
+		<result property="order" column="customOrder"/>
+		<result property="hide" column="customHide"/>
+		<collection property="options"  resultMap="options" ></collection>
+	</resultMap>
+	
+	<resultMap id="options" type="com.sobey.module.versionCustomOption.model.VersionCustomOption" >
+		<id property="uuid" column="optUuid"/>
+		<result property="name" column="optName"/>
+		<result property="desc" column="optDesc"/>
+		<result property="priceMonth" column="optPriceMonth"/>
+		<result property="priceYear" column="optPriceYear"/>
+		<result property="priceDay" column="optPriceDay"/>
+		<result property="limitedPriceMonth" column="optLimitedPriceMonth"/>
+		<result property="limitedPriceYear" column="optLimitedPriceYear"/>
+		<result property="limitedPriceDay" column="optLimitedPriceDay"/>
+		<result property="customId" column="customId"/>
+		<result property="order" column="optOrder"/>
+		<result property="hide" column="optHide"/>
+	</resultMap>
+	
+	
+	
+	
+	
+	
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.bill.mapper.NewBillDetailMapper">
+
+    <insert id="batchSave" parameterType="com.sobey.module.bill.model.NewBillDetail">
+        insert into
+        mall_new_bill_detail
+        (uuid,siteCode,accountId,account,productId,productName,billingMethod,billType,
+        payMethod,totalOrderAmount,totalPayAmount,totalLmiPri,totalRefundAmount,billDate,
+        createDate)
+        values
+        <foreach collection="list" item="nbd" separator=",">
+            (#{nbd.uuid},#{nbd.siteCode},#{nbd.accountId},#{nbd.account},#{nbd.productId},
+            #{nbd.productName},#{nbd.billingMethod},#{nbd.billType},#{nbd.payMethod},
+            #{nbd.totalOrderAmount},#{nbd.totalPayAmount},#{nbd.totalLmiPri},#{nbd.totalRefundAmount},
+            #{nbd.billDate},#{nbd.createDate})
+        </foreach>
+    </insert>
+
+    <select id="monthStatistic" resultType="com.sobey.module.bill.model.NewBillDetail">
+        select
+        payMethod,sum(totalLmiPri) as totalLmiPri
+        from
+        mall_new_bill_detail
+        <where>
+            <if test="siteCode != null and siteCode !=''">and siteCode = #{siteCode}</if>
+            <if test="accountId != null and accountId !=''">and accountId = #{accountId}</if>
+            <if test="productId != null and productId !=''">and productId = #{productId}</if>
+            and
+            billDate = #{billDate}
+        </where>
+
+        group by payMethod
+    </select>
+
+</mapper>

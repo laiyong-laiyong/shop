@@ -1,0 +1,15 @@
+server:
+  #address: 172.16.135.70
+  #C端口
+  port: 8080
+  #C上下文路径
+  servlet:
+    context-path: /sobeyMallMyBatisDao
+  #C内置tomcat编码
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://admin:sobey2020+@119.3.159.169:27017/sobeymall?authSource=admin

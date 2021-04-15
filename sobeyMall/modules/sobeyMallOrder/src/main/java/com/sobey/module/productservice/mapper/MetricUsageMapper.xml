@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.productservice.mapper.MetricUsageMapper">
+
+
+    <select id="getUsages" resultType="com.sobey.module.productservice.model.MetricUsage">
+
+        SELECT SUM(metric.value) AS `value`,DATE_FORMAT(metric.createTime,'%Y-%m-%d') AS createTime,typeCode,`type`,priceId FROM
+        (select * from metric_usage where orderNo in
+        (
+        <foreach collection="orderNos" item="orderNo" separator=",">
+            #{orderNo}
+        </foreach>
+        )
+        <![CDATA[
+        and createTime>=#{start}
+        and createTime<=#{end}
+        ]]>
+        )
+        as metric
+        GROUP BY
+        DATE_FORMAT(metric.createTime,'%Y-%m-%d'),priceId
+        order by createTime asc
+    </select>
+
+    <select id="getCurrentMonthUsage" resultType="com.sobey.module.productservice.model.MetricUsage">
+        select sum(metric.value) as `value`,typeCode,`type`,priceId from
+        (select * from metric_usage where orderNo in (
+        <foreach collection="orderNos" item="orderNo" separator=",">
+            #{orderNo}
+        </foreach>
+        ))
+        as metric
+        where
+        <![CDATA[
+        metric.createTime >= #{first}
+        and
+        metric.createTime <= #{last}
+        ]]>
+        group by priceId
+    </select>
+
+    <select id="getTotalUsages" resultType="com.sobey.module.productservice.model.MetricUsage">
+        select sum(metric.value) as `value`,typeCode,`type`,priceId from
+        (select * from metric_usage where orderNo in (
+        <foreach collection="orderNos" item="orderNo" separator=",">
+            #{orderNo}
+        </foreach>
+        )) as metric
+        group by priceId
+    </select>
+
+    <select id="getUsagesByOrderNos" resultType="com.sobey.module.productservice.model.MetricUsage">
+        select
+        *
+        from
+        metric_usage
+        where
+        orderNo
+        in
+        (
+        <foreach collection="orderNos" item="orderNo" separator=",">
+            #{orderNo}
+        </foreach>
+        )
+    </select>
+
+</mapper>

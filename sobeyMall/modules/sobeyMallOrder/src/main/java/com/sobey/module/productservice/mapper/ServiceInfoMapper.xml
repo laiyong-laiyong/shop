@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.productservice.mapper.ServiceInfoMapper">
+
+    <select id="page" parameterType="com.sobey.module.productservice.model.ServiceInfo" resultType="com.sobey.module.productservice.model.ServiceInfo">
+        select * from service_info
+        <where>
+            <if test="productId != null and productId != ''">and productId=#{productId}</if>
+            <if test="accountId != null and accountId != ''">and accountId=#{accountId}</if>
+            <if test="siteCode != null and siteCode != ''">and siteCode=#{siteCode}</if>
+            <if test="relatedProductId != null and relatedProductId != ''">and relatedProductId=#{relatedProductId}</if>
+            <if test="relatedProductName != null and relatedProductName != ''">and relatedProductName like concat('%',#{relatedProductName},'%')</if>
+            <if test="openType != null and openType != ''">and openType=#{openType}</if>
+            <if test="endDate != null">
+                <![CDATA[and expireDate<=#{endDate}]]>
+                and serviceStatus != '3'
+            </if>
+            <if test="openStart != null">
+                <![CDATA[and createDate>=#{openStart}]]>
+                and serviceStatus != '3'
+            </if>
+            <if test="openEnd != null">
+                <![CDATA[and createDate<=#{openEnd}]]>
+                and serviceStatus != '3'
+            </if>
+            <if test="expireStart != null">
+                <![CDATA[and expireDate>=#{expireStart}]]>
+                and serviceStatus != '3'
+            </if>
+            <if test="expireEnd != null">
+                <![CDATA[and expireDate<=#{expireEnd}]]>
+                and serviceStatus != '3'
+            </if>
+        </where>
+        order by createDate desc
+    </select>
+
+    <select id="isOpened" resultType="com.sobey.module.productservice.model.ServiceInfo">
+        select * from service_info
+        where productId=#{productId}
+        and accountId = #{accountId}
+        and serviceStatus != '3'
+    </select>
+
+    <select id="remainNotice" resultType="com.sobey.module.productservice.model.ServiceInfo">
+        select * from service_info
+        where
+        <![CDATA[expireDate>=#{start}]]>
+        and
+        <![CDATA[expireDate<#{end}]]>
+        <!--C只查询正常的服务  -->
+        and serviceStatus = '1'
+    </select>
+
+    <select id="findExpiredService" resultType="com.sobey.module.productservice.model.ServiceInfo">
+        select * from service_info
+        where
+        <![CDATA[expireDate <= #{expireTime}]]>
+        and
+        serviceStatus != #{serviceStatus}
+    </select>
+
+    <select id="collectServiceNum" resultType="int">
+        select count(1) from service_info
+        where
+        date_format(createDate,'%Y-%m') = date_format(#{date},'%Y-%m')
+        and
+        serviceStatus != #{serviceStatus}
+    </select>
+
+    <select id="findByAppId" resultType="com.sobey.module.productservice.model.ServiceInfo">
+        select * from service_info where appId = #{appId}
+    </select>
+
+    <select id="relatedProducts" resultType="com.sobey.module.productservice.model.ServiceInfo">
+        select * from service_info
+        where
+        siteCode = #{siteCode}
+        and
+        productId = #{productId}
+        and
+        serviceStatus
+        in
+        (
+        <foreach collection="serviceStatuses" item="status" separator=",">
+            #{status}
+        </foreach>
+        )
+    </select>
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sobey</groupId>
+		<artifactId>sobeyMall</artifactId>
+		<version>1.0</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+	<artifactId>sobeyMallProduct</artifactId>
+	<name>sobeyMallProduct</name>
+	<description></description>
+	<packaging>jar</packaging>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>com.sobey</groupId>
+			<artifactId>sobeyMallCommon</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sobey</groupId>
+			<artifactId>sobeyMallMyBatisDao</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<!-- 如果mapper.xml是放在src/main/java目录下，需配置以下 -->
+			<resource>
+				<directory>src/main/java</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/mapper/*.xml</include>
+				</includes>
+			</resource>
+			<!-- 资源配置文件 -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+
+		<!--打包成jar -->
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<!-- 将生成的jar文件复制到src/main/docker目录，供华为云devCloud生成镜像时候使用 -->
+			<plugin>   
+             <artifactId>maven-antrun-plugin</artifactId>    
+             <executions>       
+                <execution>         
+                   <phase>package</phase>        
+                   <goals>            
+                         <goal>run</goal>        
+                   </goals>             
+                   <configuration>       
+                     <tasks>
+                        <copy todir="${basedir}/src/main/docker" overwrite="true" > 
+                            <fileset dir="${project.build.directory}" erroronmissingdir="false">
+                                <include name="*.jar"/>	
+                            </fileset>
+                         </copy>     
+                     </tasks>        
+                   </configuration>        
+                </execution>    
+             </executions>  
+            </plugin>
+		</plugins>
+	</build>
+
+
+
+
+</project>

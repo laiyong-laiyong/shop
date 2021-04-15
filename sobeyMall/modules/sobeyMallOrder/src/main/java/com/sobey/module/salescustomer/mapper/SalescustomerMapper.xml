@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.salescustomer.mapper.SalescustomerMapper">
+
+	<select id="page"
+		resultType="salescustomer"
+		parameterType="com.sobey.module.salescustomer.model.Salescustomer">
+		SELECT
+			t.uuid,
+			t.saleUserCode,
+			t.customerUserCode,
+			t.customerLoginName,
+			t.createDate,
+			t.updateDate,
+			t.createUserCode,
+			t.description,
+			t.siteCode,
+			ms.`uuid` as smUuid,
+			ms.`name`,
+			ms.siteCode as saleSiteCode,
+			ms.loginName
+		FROM
+			mall_saleman_customer t
+		LEFT JOIN mall_saleman ms ON t.saleUserCode = ms.userCode
+		<include refid="whereSql"></include>
+		order by createDate desc
+	</select>
+	<sql id="whereSql">
+		<where>
+			<if test="uuid != null and uuid != ''"> and t.uuid = #{uuid} </if>
+			<if test="saleUserCode != null and saleUserCode != ''"> and t.saleUserCode = #{saleUserCode} </if>
+			
+			<if test="saleman != null"> 
+				<if test="saleman.name != null and saleman.name != ''"> and ms.name like CONCAT('%',#{saleman.name},'%')  </if>
+				<if test="saleman.loginName != null and saleman.loginName != ''"> and ms.loginName like CONCAT('%',#{saleman.loginName},'%')  </if>
+			</if>
+			<if test="siteCode != null and siteCode != ''"> and t.siteCode = #{siteCode} </if>
+			<if test="customerUserCode != null and customerUserCode != ''"> and t.customerUserCode = #{customerUserCode} </if>
+			<if test="customerLoginName != null and customerLoginName != ''"> and t.customerLoginName like CONCAT('%',#{customerLoginName},'%')  </if>
+			<if test="startDate != null"><![CDATA[ and #{startDate} <= createDate ]]></if>
+			<if test="endDate != null"><![CDATA[ and #{endDate} >= createDate ]]></if>
+		</where>
+	</sql>
+
+
+	
+	
+	<resultMap id="salescustomer" type="com.sobey.module.salescustomer.model.Salescustomer" >
+		<id property="uuid" column="uuid"/>
+		<result property="saleUserCode" column="saleUserCode"/>
+		<result property="customerUserCode" column="customerUserCode"/>
+		<result property="customerLoginName" column="customerLoginName"/>
+		<result property="createUserCode" column="createUserCode"/>
+		<result property="description" column="description"/>
+		<result property="createDate" column="createDate"/>
+		<result property="updateDate" column="updateDate"/>
+		<result property="siteCode" column="siteCode"/>
+		
+		<association property="salesman"  resultMap="salesman">
+		</association>
+		
+		
+		
+	</resultMap>
+	
+	
+	<resultMap id="salesman" type="com.sobey.module.salesman.model.Salesman" >
+		<id property="uuid" column="smUuid"/>
+		<result property="name" column="name"/>
+		<result property="loginName" column="loginName"/>
+		<result property="siteCode" column="saleSiteCode"/>
+	</resultMap>
+
+
+
+	<select id="customerUserCodes" resultType="string">
+		select
+		distinct(customerUserCode)
+		from
+		mall_saleman_customer
+		where
+		saleUserCode = #{saleUserCode}
+	</select>
+
+
+
+</mapper>

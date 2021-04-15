@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.balance.mapper.BalanceMapper">
+
+    <select id="findByAccountId" resultType="com.sobey.module.balance.model.Balance">
+        select * from mall_balance where accountId = #{accountId} for update
+    </select>
+    <update id="updateCredits">
+        update mall_balance set credits = #{credits} where accountId = #{accountId}
+    </update>
+
+    <select id="findAccounts" resultType="com.sobey.module.balance.model.Balance">
+        select
+        *
+        from
+        mall_balance
+        <where>
+            <if test="account != null and account != ''"> and account like concat('%',#{account},'%')</if>
+            <if test="accountId != null and accountId != ''"> and accountId = #{accountId}</if>
+        </where>
+        order by balance asc
+    </select>
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sobey.module.cooperationCase.mapper.CooperationCaseMapper">
+
+
+
+	<select id="list"
+
+		resultType="com.sobey.module.cooperationCase.model.CooperationCase"
+		parameterType="com.sobey.module.cooperationCase.model.CooperationCase">
+
+		select
+		*
+		from mall_product_cooperation_case vs
+		<where>
+			<if test="name != null and name != ''"> and vs.name like CONCAT('%',#{name},'%')  </if>
+
+			<if test="uuid != null and uuid != ''"> and vs.uuid = #{uuid} </if>
+			<if test="productId != null and productId != ''"> and vs.productId = #{productId} </if>
+			<if test="startDate != null and startDate != ''"><![CDATA[ and #{startDate} <= createDate ]]></if>
+			<if test="endDate != null and endDate != ''"><![CDATA[ and #{endDate} >= createDate ]]></if>
+		</where>
+		
+		order by vs.order asc
+	</select>
+
+	<delete id="remove">
+		delete from mall_product_cooperation_case
+		<where>
+			<if test="uuid != null and uuid != ''"> and uuid = #{uuid} </if>
+			<if test="productId != null and productId != ''"> and productId = #{productId}   </if>
+		</where>
+	</delete>
+
+
+
+
+</mapper>

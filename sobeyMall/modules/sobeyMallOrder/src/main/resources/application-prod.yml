@@ -1,0 +1,70 @@
+server:
+  #address: 172.16.135.70
+  #C端口
+  port: 80
+  #C上下文路径
+  servlet:
+    context-path: /sobeyMallOrder
+spring:
+  banner:
+    location: banner.txt
+  main:
+    banner-mode: console
+  data:
+    mongodb:
+      #集群方式需要追加&replicaSet=replica
+      uri: mongodb://${mall.mongo.username}:${mall.mongo.password}@${mall.mongo.url}/sobeymall?authSource=admin
+      #用户名或密码有特殊符号例如@或:等要用url加密
+  datasource:
+    url: jdbc:mysql://${mall.mysql.url}/${order.db}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&createDatabaseIfNotExist=true
+    username: ${mall.mysql.username}
+    password: ${mall.mysql.password}
+  flyway:
+    # 是否执行不含元数据表的非空模式迁移
+    baseline-on-migrate: true
+    # 启用flyway
+    enabled: true
+    # 禁止清理数据表
+    clean-disabled: true
+    # 版本号
+    baseline-version: 2020.01.01
+    # SQL迁移的文件名前缀
+    sql-migration-prefix: V
+    # SQL迁移的文件名后缀
+    sql-migration-suffixes: .sql
+    validate-on-migrate: true
+    # SQL迁移的文件所在位置
+    locations: classpath:db/migration
+    # 检查迁移脚本位置是否存在
+    check-location: false
+#rabbitmq配置
+  rabbitmq:
+    host: ${mall.rabbit.host}
+    port: ${mall.rabbit.port}
+    username: ${mall.rabbit.username} #sobeylingyun
+    password: ${mall.rabbit.password} #Sobey@2020
+    listener:
+      simple:
+        acknowledge-mode: auto #消息消费成功自动通知服务端确认
+        default-requeue-rejected: false #消费发生未被catch住的异常时直接抛弃消息
+        prefetch: 5 #每个consumer最大可以缓存5条待处理的消息在本地
+        retry:
+          enabled: false #推送消息失败是否开启重试机制，默认false，这里推送失败手动处理消息
+        concurrency: 3 #最小的监听消息的线程数
+        max-concurrency: 18 #最大的监听消息的线程数
+    publisher-confirm-type: correlated #消息成功发送到交换器后触发回调
+    publisher-returns: on #根据指定的routingKey找不到队列时触发回调
+  redis:
+    host: ${mall.redis.host}
+    port: ${mall.redis.port}
+    password: ${mall.redis.password}
+#用于记录mongo中的集合名称,方便使用
+mongo:
+  collection:
+    mall_order: mall_order #订单表
+    mall_pack_order: mall_pack_order #套餐包订单表
+    mall_pack_use_record: mall_pack_use_record #套餐使用明细表
+
+#定时任务
+sobey-task:
+  enable: 'yes'

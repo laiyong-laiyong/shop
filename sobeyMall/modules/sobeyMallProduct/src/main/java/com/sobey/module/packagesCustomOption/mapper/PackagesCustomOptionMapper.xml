@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.packagesCustomOption.mapper.PackagesCustomOptionMapper">
+
+	<select id="list"
+	
+		resultType="com.sobey.module.packagesCustomOption.model.PackagesCustomOption"
+		parameterType="com.sobey.module.packagesCustomOption.model.PackagesCustomOption">
+
+		select
+		*
+		from mall_product_packages_custom_option vs
+		<where>
+			<if test="name != null and name != ''"> and vs.name like CONCAT('%',#{name},'%')  </if>
+
+			<if test="uuid != null and uuid != ''"> and vs.uuid = #{uuid} </if>
+			<if test="customId != null and customId != ''"> and vs.customId = #{customId} </if>
+			<if test="startDate != null and startDate != ''"><![CDATA[ and #{startDate} <= createDate ]]></if>
+			<if test="endDate != null and endDate != ''"><![CDATA[ and #{endDate} >= createDate ]]></if>
+		</where>
+	</select>
+	
+	<delete id="remove">
+		delete from mall_product_packages_custom_option
+		<where>
+			<if test="uuid != null and uuid != ''"> and uuid = #{uuid} </if>
+			<if test="customId != null and customId != ''"> and customId = #{customId}   </if>
+		</where>
+
+	</delete>
+	
+	
+	
+	
+	
+	
+</mapper>

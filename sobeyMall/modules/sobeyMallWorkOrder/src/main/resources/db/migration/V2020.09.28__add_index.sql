@@ -1,0 +1,1 @@
+ALTER TABLE mall_work_order_media ADD INDEX `id_mediaId` (`mediaId`) USING BTREE ;

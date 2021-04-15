@@ -1,0 +1,1 @@
+alter table mall_msg_proclamation add column cover mediumtext COMMENT '封面图片';

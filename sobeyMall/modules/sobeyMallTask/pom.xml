@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sobey</groupId>
+		<artifactId>sobeyMall</artifactId>
+		<version>1.0</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+	<artifactId>sobeyMallTask</artifactId>
+	<name>sobeyMallTask</name>
+	<description></description>
+	<packaging>jar</packaging>
+
+
+	<dependencies>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<!--  -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<scope>compile</scope>
+			<exclusions>
+			   <exclusion>
+			      <groupId>com.zaxxer</groupId>
+			      <artifactId>HikariCP</artifactId>
+			   </exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.sobey</groupId>
+			<artifactId>sobeyMallCommon</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.sobey</groupId>
+			<artifactId>sobeyMallMyBatisDao</artifactId>
+		</dependency>
+
+
+		<!-- C此配置加上bootstrap.yml可以读取K8S配置C <dependency> <groupId>org.springframework.cloud</groupId> 
+			<artifactId>spring-cloud-starter-kubernetes-config</artifactId> </dependency> -->
+
+	</dependencies>
+	
+	
+	<build>
+	  <!--打包成jar -->
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<!-- 将生成的jar文件复制到src/main/docker目录，供华为云devCloud生成镜像时候使用 -->
+			<plugin>   
+             <artifactId>maven-antrun-plugin</artifactId>    
+             <executions>       
+                <execution>         
+                   <phase>package</phase>        
+                   <goals>            
+                         <goal>run</goal>        
+                   </goals>             
+                   <configuration>       
+                     <tasks>
+                        <copy todir="${basedir}/src/main/docker" overwrite="true" > 
+                            <fileset dir="${project.build.directory}" erroronmissingdir="false">
+                                <include name="*.jar"/>	
+                            </fileset>
+                         </copy>     
+                     </tasks>        
+                   </configuration>        
+                </execution>    
+             </executions>  
+            </plugin>
+		</plugins>
+	
+	</build>
+
+
+
+
+
+</project>

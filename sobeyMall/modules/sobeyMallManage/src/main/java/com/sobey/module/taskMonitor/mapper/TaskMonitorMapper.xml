@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.taskMonitor.mapper.TaskMonitorMapper">
+
+	
+	
+	
+	
+	
+	
+	<select id="list" resultType="com.sobey.module.taskMonitor.model.TaskMonitor">
+		<include refid="selectSql"></include>
+		<include refid="whereSql"></include>
+	</select>
+	
+	<sql id="whereSql">
+	 <include refid="whereDetailSql"></include>
+	 order by mp.createDate desc
+	</sql>
+	
+	<sql id="whereDetailSql">
+	  <where>
+				<if test="taskName != null and taskName != ''"> and mp.taskName like CONCAT('%',#{taskName},'%')  </if>
+				<if test="processName != null and processName != ''"> and mp.processName like CONCAT('%',#{processName},'%')  </if>
+				<if test="site != null and site != ''"> and mp.site like CONCAT('%',#{site},'%')  </if>
+				<if test="status != null and status != ''"> and mp.status = #{status} </if>
+				<if test="startDate != null"><![CDATA[ and #{startDate} <= processStartDate ]]></if>
+				<if test="endDate != null"><![CDATA[ and #{endDate} >= processEndDate ]]></if>
+	 </where>
+	</sql>
+	
+	
+	<sql id="selectSql">
+	
+		select * from mall_manage_task_monitor mp
+	</sql>
+	
+	<select id="statistic" resultType="java.util.HashMap">
+		select
+			mp.status as status,
+			count(mp.status) as number
+		from mall_manage_task_monitor mp group by mp.status
+		<include refid="whereDetailSql"></include>
+	</select>
+	
+	<select id="page" resultType="com.sobey.module.taskMonitor.model.TaskMonitor" parameterType="com.sobey.module.taskMonitor.model.TaskMonitor">
+		<include refid="selectSql"></include>
+		<include refid="whereSql"></include>
+	</select>
+	
+	
+	
+	
+	
+</mapper>

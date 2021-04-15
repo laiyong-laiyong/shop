@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.bill.mapper.BillDetailMapper">
+
+    <insert id="batchSave" parameterType="com.sobey.module.bill.model.BillDetail">
+        insert into mall_bill_detail
+        (uuid,billUuid,personalBillUuid,siteCode,accountId,account,productId,productName,billingMethod,billType,
+        totalOrderAmount,totalPayAmount,balAmount,wxAmount,zfbAmount,voucherAmount,totalLmiPri,totalRefundAmount,
+        balRefundTotalAmount,wxRefundAmount,zfbRefundAmount,createDate)
+        values
+        <foreach collection="list" item="bd" separator=",">
+            (#{bd.uuid},#{bd.billUuid},#{bd.personalBillUuid},#{bd.siteCode},#{bd.accountId},#{bd.account},#{bd.productId},#{bd.productName},#{bd.billingMethod},
+            #{bd.billType},#{bd.totalOrderAmount},#{bd.totalPayAmount},#{bd.balAmount},#{bd.wxAmount},
+            #{bd.zfbAmount},#{bd.voucherAmount},#{bd.totalLmiPri},#{bd.totalRefundAmount},#{bd.balRefundTotalAmount},
+            #{bd.wxRefundAmount},#{bd.zfbRefundAmount},#{bd.createDate})
+        </foreach>
+    </insert>
+<!--    查询个人消费汇总，不查询限价字段-->
+    <select id="personalBillDetails" resultType="com.sobey.module.bill.model.BillDetail">
+        select
+        uuid,billUuid,personalBillUuid,siteCode,accountId,account,productId,productName,billingMethod,billType,
+        totalOrderAmount,totalPayAmount,balAmount,wxAmount,zfbAmount,voucherAmount,totalLmiPri,totalRefundAmount,createDate
+        from
+        mall_bill_detail
+        where
+        personalBillUuid = #{personalBillUuid}
+    </select>
+    <select id="consumeDistribution" resultType="com.sobey.module.bill.model.BillDetail">
+        select
+        uuid,billUuid,personalBillUuid,siteCode,accountId,account,productId,productName,billingMethod,
+        sum(totalOrderAmount) as totalOrderAmount,sum(totalPayAmount) as totalPayAmount,
+        sum(totalRefundAmount) as totalRefundAmount,createDate
+        from
+        mall_bill_detail
+        where
+        personalBillUuid = #{uuid}
+        group by
+        productId
+        order by
+        totalPayAmount
+        desc
+    </select>
+
+    <select id="consumeSum" resultType="com.sobey.module.bill.model.BillDetail">
+        select
+        *
+        from
+        mall_bill_detail
+        <where>
+            <if test="productId != null and productId != ''">and productId = #{productId}</if>
+            and
+            personalBillUuid in
+            (
+                <foreach collection="perBillUuids" item="perBUuid" separator=",">
+                    #{perBUuid}
+                </foreach>
+            )
+        </where>
+    </select>
+
+    <select id="statisticConsume" resultType="com.sobey.module.bill.model.BillDetail">
+        select
+        uuid,billUuid,personalBillUuid,siteCode,accountId,account,productId,productName,billingMethod,
+        sum(totalOrderAmount) as totalOrderAmount,sum(totalPayAmount) as totalPayAmount,
+        sum(totalRefundAmount) as totalRefundAmount,createDate
+        from
+        mall_bill_detail
+        where
+        personalBillUuid = #{pbUuid}
+        group by
+        productId
+    </select>
+<!--    产品销售top排行-->
+    <select id="consumeRank" resultType="com.sobey.module.bill.model.BillDetail">
+        select
+        uuid,billUuid,personalBillUuid,siteCode,accountId,account,productId,productName,billingMethod,
+        sum(totalOrderAmount) as totalOrderAmount,sum(totalPayAmount) as totalPayAmount,
+        sum(totalRefundAmount) as totalRefundAmount,createDate
+        from
+        mall_bill_detail
+        where
+        billUuid = #{billUuid}
+        group by
+        productId
+        order by
+        totalPayAmount
+        desc
+        limit 0,5
+    </select>
+
+</mapper>

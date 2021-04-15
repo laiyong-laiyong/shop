@@ -1,0 +1,60 @@
+server:
+  #这里如果开启，会导致放到docker里,访问不到swagger
+  #address: 127.0.0.1
+  #C端口
+  port: 80
+  #C上下文路径
+  servlet:
+    context-path: /sobeyMallProduct
+  #C内置tomcat编码
+  tomcat:
+    uriEncoding: utf-8
+
+
+spring:
+  #redis    
+  redis:
+    host: ${mall.redis.host}
+    port: ${mall.redis.port}
+    password: ${mall.redis.password}
+  #C数据库配置    
+  datasource:
+      url: jdbc:mysql://${mall.mysql.url}/${product.db}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&createDatabaseIfNotExist=true
+      username: ${mall.mysql.username}
+      password: ${mall.mysql.password}
+  flyway:
+      # 是否执行不含元数据表的非空模式迁移
+      baseline-on-migrate: true
+      # 启用flyway
+      enabled: true
+      # 禁止清理数据表
+      clean-disabled: true
+      # 版本号
+      baseline-version: 2020.01.01
+      # SQL迁移的文件名前缀
+      sql-migration-prefix: V
+      # SQL迁移的文件名后缀
+      sql-migration-suffixes: .sql
+      validate-on-migrate: true
+      # SQL迁移的文件所在位置
+      locations: classpath:db/migration
+      # 检查迁移脚本位置是否存在
+      check-location: false      
+#定时任务
+sobey-task:
+  #必须使用单引号:生效yes,不生效no
+  enable: 'no'
+
+#商品的域名访问
+productDomain: ${productDomain}  
+
+#认证中心的资源编号
+resource:
+     #商城资源的根节点
+     root: ${resourceRoot}
+     #商品
+     product: ${resourceProduct} 
+     console:
+ 
+  
+    

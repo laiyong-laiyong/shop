@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.stationMsg.mapper.MallMsgTemplateMapper">
+
+    <insert id="conditionInsert" parameterType="com.sobey.module.stationMsg.model.MallMsgTemplate">
+        insert into
+        mall_msg_template(uuid,`name`,parentTypeCode,parentTypeDesc,msgTypeCode,msgTypeDesc,msgTemplate,createTime,updateTime)
+        select
+        #{uuid},#{name},#{parentTypeCode},#{parentTypeDesc},
+        #{msgTypeCode},#{msgTypeDesc},#{msgTemplate},#{createTime},#{updateTime}
+        from
+        DUAL
+        where not exists
+        (SELECT 1 FROM mall_msg_template WHERE msgTypeCode = #{msgTypeCode})
+    </insert>
+
+</mapper>

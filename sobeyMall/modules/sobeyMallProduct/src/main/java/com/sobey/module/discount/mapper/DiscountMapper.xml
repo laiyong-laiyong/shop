@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.discount.mapper.DiscountMapper">
+
+	<select id="page"
+		resultType="com.sobey.module.discount.model.Discount"
+		parameterType="com.sobey.module.discount.model.Discount">
+		select * from mall_product_discount t
+		<include refid="whereSql"></include>
+		order by createDate desc
+	</select>
+
+
+
+
+
+	<sql id="whereSql">
+		<where>
+			<if test="uuid != null and uuid != ''"> and t.uuid = #{uuid} </if>
+			<if test="userLoginName != null and userLoginName != ''"> and t.userLoginName like CONCAT('%',#{userLoginName},'%')  </if>
+			<if test="customer != null and customer != ''"> and t.customer like CONCAT('%',#{customer},'%')  </if>
+			<if test="salesman != null and salesman != ''"> and t.salesman like CONCAT('%',#{salesman},'%')  </if>
+			<if test="productId != null and productId != ''"> and t.productId = #{productId} </if>
+			<if test="userCode != null and userCode != ''"> and t.userCode = #{userCode} </if>
+			<if test="startDate != null"><![CDATA[ and #{startDate} <= createDate ]]></if>
+			<if test="endDate != null"><![CDATA[ and #{endDate} >= createDate ]]></if>
+		</where>
+	</sql>
+
+
+
+
+
+
+
+
+</mapper>

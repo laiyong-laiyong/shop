@@ -1,0 +1,71 @@
+server:
+  #address: 172.16.135.70
+  #C端口
+  #port: 8080
+  #C上下文路径
+  #servlet:
+    #context-path: /sobeyMallMyBatisDao
+  #C内置tomcat编码
+  tomcat:
+    uri-encoding: UTF-8
+
+
+spring:
+  #C数据库配置
+  datasource:
+      url: jdbc:mysql://119.3.159.169:3306/sobey-mall-product-db?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+      username: root
+      password: sobeymall
+      type: org.apache.commons.dbcp2.BasicDataSource
+      driverClassName: com.mysql.cj.jdbc.Driver
+      dbcp2:
+         initialSize: 1
+         minIdle: 3
+         max-total: 50
+         #C配置获取连接等待超时的时间
+         max-wait-millis: 120000
+         #C配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+         timeBetweenEvictionRunsMillis: 60000
+         #C配置一个连接在池中最小生存的时间，单位是毫秒
+         minEvictableIdleTimeMillis: 600000
+         validationQuery: select 'x'
+         testWhileIdle: true
+         testOnBorrow: true
+         testOnReturn: false
+         #C打开PSCache，并且指定每个连接上PSCache的大小
+         poolPreparedStatements: true
+     
+
+
+
+    
+mybatis-plus:
+  mapper-locations: classpath:/com/sobey/**/mapper/*Mapper.xml
+  #Cmodel类路径
+  typeAliasesPackage: com.sobey.module.**.model
+  #C自定义字段类型转换路径
+  typeHandlersPackage: com.sobey.framework.mybatisPlus.CommonFieldHandler
+  global-config:
+    #C0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)
+    id-type: 3
+    #C驼峰下划线转换
+    db-column-underline: false
+    #C刷新mapper 调试神器
+    refresh-mapper: true
+    #C字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    #C1和2的效果都是如果是"",则更新,如果是null,不更新
+    field-strategy: 2
+    #逻辑删除
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: false
+    #C配置的缓存的全局开关
+    cache-enabled: true
+    #C延时加载的开关
+    lazyLoadingEnabled: true
+    #C开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+    multipleResultSetsEnabled: true
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
+

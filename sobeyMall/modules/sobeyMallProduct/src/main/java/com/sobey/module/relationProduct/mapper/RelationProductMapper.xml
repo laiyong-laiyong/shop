@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.relationProduct.mapper.RelationProductMapper">
+
+	<select id="page" resultType="com.sobey.module.relationProduct.model.RelationProduct" parameterType="com.sobey.module.relationProduct.model.RelationProduct">
+		select * from mall_product_relation vs
+		<include refid="whereSql"></include>
+	</select>
+	
+	
+	
+	
+	
+	<sql id="whereSql">
+	  <where>
+				<if test="uuid != null and uuid != ''"> and vs.uuid = #{uuid} </if>
+				<if test="productId != null and productId != ''"> and vs.productId = #{productId} </if>
+				<if test="relationProductId != null and relationProductId != ''"> and vs.relationProductId = #{relationProductId} </if>
+				<if test="startDate != null and startDate != ''"><![CDATA[ and #{startDate} <= createDate ]]></if>
+				<if test="endDate != null and endDate != ''"><![CDATA[ and #{endDate} >= createDate ]]></if>
+	 </where>
+	</sql>
+	
+	<select id="list" resultType="com.sobey.module.relationProduct.model.RelationProduct" >
+		
+		select
+			vs.uuid,
+			vs.productId,
+			vs.relationProductId,
+			mp.name as relationProductName
+		from mall_product_relation vs 
+		left join mall_product mp on vs.relationProductId= mp.uuid
+		<include refid="whereSql"></include>
+	</select>
+	
+	<!--通过商品编号查询关联商品  -->
+	<select id="selectByCode" resultType="com.sobey.module.relationProduct.model.RelationProduct" >
+		
+		select
+			vs.uuid,
+			vs.productId,
+			mpt.name as productName,
+			vs.relationProductId,
+			mp.name as relationProductName
+		from mall_product_relation vs 
+		left join mall_product mp on vs.relationProductId= mp.uuid
+		left join mall_product mpt on vs.productId= mpt.uuid
+		<where>
+				<if test="code != null and code != ''"> and mp.`code`  = #{code} </if>
+	  </where>
+	</select>
+	
+	
+	
+	
+	
+</mapper>

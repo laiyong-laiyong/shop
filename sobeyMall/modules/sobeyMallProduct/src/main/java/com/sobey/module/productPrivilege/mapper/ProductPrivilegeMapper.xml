@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.productPrivilege.mapper.ProductPrivilegeMapper">
+
+	
+	
+	
+	
+	<select id="page" resultType="com.sobey.module.productPrivilege.model.ProductPrivilege" parameterType="com.sobey.module.productPrivilege.model.ProductPrivilege">
+		select
+			*
+		from mall_product_custom_privilege 
+		<where>
+				<if test="name != null and name != ''"> and name like    CONCAT('%',#{name},'%')    </if>
+		</where>
+		order by createDate desc
+	</select>
+	
+	<select id="list" resultType="com.sobey.module.productPrivilege.model.ProductPrivilege" parameterType="com.sobey.module.productPrivilege.model.ProductPrivilege">
+		select
+			*
+		from mall_product_custom_privilege t
+		<where>
+				<if test="name != null and name != ''"> and t.name like    CONCAT('%',#{name},'%')    </if>
+				<if test="uuid != null and uuid != ''"> and t.uuid = #{uuid} </if>
+				<if test="productId != null and productId != ''"> and t.productId =#{productId}   </if>
+		</where>
+		order by t.order asc
+	</select>
+	
+	
+	
+	
+	
+</mapper>

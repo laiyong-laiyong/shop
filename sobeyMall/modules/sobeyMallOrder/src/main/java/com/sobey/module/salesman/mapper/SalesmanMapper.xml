@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.salesman.mapper.SalesmanMapper">
+
+	<select id="page"
+		resultType="com.sobey.module.salesman.model.Salesman"
+		parameterType="com.sobey.module.salesman.model.Salesman">
+		select * from mall_saleman t
+		<include refid="whereSql"></include>
+		order by createDate desc
+	</select>
+
+
+
+
+
+	<sql id="whereSql">
+		<where>
+			<if test="uuid != null and uuid != ''"> and t.uuid = #{uuid} </if>
+			<if test="userCode != null and userCode != ''"> and t.userCode = #{userCode} </if>
+			<if test="loginName != null and loginName != ''"> and t.loginName like CONCAT('%',#{loginName},'%')  </if>
+			<if test="name != null and name != ''"> and t.name like CONCAT('%',#{name},'%')  </if>
+			<if test="siteCode != null and siteCode != ''"> and t.siteCode = #{siteCode} </if>
+			<if test="startDate != null"><![CDATA[ and #{startDate} <= createDate ]]></if>
+			<if test="endDate != null"><![CDATA[ and #{endDate} >= createDate ]]></if>
+		</where>
+	</sql>
+
+	<select id="selectByNames" resultType="com.sobey.module.salesman.model.Salesman">
+		select
+		*
+		from
+		mall_saleman
+		<where>
+			<if test="name != null and name != ''"> and `name` like concat('%',#{name},'%')</if>
+			<if test="loginName != null and loginName != ''"> and loginName like concat('%',#{loginName},'%')</if>
+		</where>
+	</select>
+
+
+
+
+
+
+</mapper>

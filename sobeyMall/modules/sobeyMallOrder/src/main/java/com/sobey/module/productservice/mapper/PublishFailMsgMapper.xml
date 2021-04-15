@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.productservice.mapper.PublishFailMsgMapper">
+
+    <select id="page" resultType="com.sobey.module.productservice.model.PublishFailMsg">
+        select * from publish_fail_msg
+        <where>
+            <if test="failMsg != null">
+                <if test="failMsg.appId != null and failMsg.appId != ''"> and appId = #{failMsg.appId}</if>
+                <if test="failMsg.userCode != null and failMsg.userCode != ''"> and userCode = #{failMsg.userCode}</if>
+                <if test="failMsg.manualProcessStatus != null and failMsg.manualProcessStatus != ''"> and manualProcessStatus = #{failMsg.manualProcessStatus}</if>
+                <if test="failMsg.handler != null and failMsg.handler != ''"> and handler like concat('%',#{failMsg.handler},'%') </if>
+                <if test="failMsg.chargeId != null and failMsg.chargeId != ''"> and `usage` like concat('%',#{failMsg.chargeId},'%') </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,1 @@
+alter table mall_product_category add column `order` int(11) COMMENT '顺序'; 

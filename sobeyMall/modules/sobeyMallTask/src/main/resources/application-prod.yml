@@ -1,0 +1,37 @@
+server:
+  #address: 172.16.135.70
+  #C端口
+  port: 80
+  #C上下文路径
+  servlet:
+    context-path: /sobeyMallTask
+  #C内置tomcat编码
+  tomcat:
+    uri-encoding: UTF-8
+
+     
+
+spring:
+  #C数据库配置    
+  datasource:
+      url: jdbc:mysql://${mall.mysql.url}/${task.db}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&createDatabaseIfNotExist=true
+      username: ${mall.mysql.username}
+      password: ${mall.mysql.password}
+  flyway:
+      # 是否执行不含元数据表的非空模式迁移
+      baseline-on-migrate: true
+      # 启用flyway
+      enabled: true
+      # 禁止清理数据表
+      clean-disabled: true
+      # 版本号
+      baseline-version: 2020.01.01
+      # SQL迁移的文件名前缀
+      sql-migration-prefix: V
+      # SQL迁移的文件名后缀
+      sql-migration-suffixes: .sql
+      validate-on-migrate: true
+      # SQL迁移的文件所在位置
+      locations: classpath:db/migration
+      # 检查迁移脚本位置是否存在
+      check-location: false      

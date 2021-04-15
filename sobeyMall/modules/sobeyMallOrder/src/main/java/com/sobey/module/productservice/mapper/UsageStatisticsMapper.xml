@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.productservice.mapper.UsageStatisticsMapper">
+
+    <select id="getUsages" resultType="com.sobey.module.productservice.model.UsageStatistics">
+        SELECT SUM(`value`) AS `value`,DATE_FORMAT(createDate,'%Y-%m-%d') AS createDate,metricId,appId,typeCode,`type`
+        FROM
+        usage_statistics
+        where appId=#{appId}
+        <![CDATA[
+        and createDate>=#{start}
+        and createDate<=#{end}
+        ]]>
+        GROUP BY
+        DATE_FORMAT(createDate,'%Y-%m-%d'),metricId
+        order by createDate asc
+    </select>
+
+    <select id="getCurrentMonthUsage" resultType="com.sobey.module.productservice.model.UsageStatistics">
+        select sum(`value`) as `value`,typeCode,`type`,metricId,appId from usage_statistics
+        where
+        appId=#{appId}
+        and
+        <![CDATA[
+        createDate >= #{first}
+        and
+        createDate <= #{last}
+        ]]>
+        group by metricId
+    </select>
+
+    <select id="getTotalUsages" resultType="com.sobey.module.productservice.model.UsageStatistics">
+        select sum(`value`) as `value`,typeCode,`type`,metricId,appId from usage_statistics
+        where
+        appId=#{appId}
+        group by metricId
+    </select>
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.voucher.mapper.VoucherMapper">
+
+    <select id="pages" parameterType="com.sobey.module.voucher.model.Voucher" resultType="com.sobey.module.voucher.model.Voucher">
+
+        select * from mall_voucher
+        <where>
+            <if test="uuid != null and uuid != ''">and uuid = #{uuid}</if>
+            <if test="vouCode != null and vouCode != ''">and vouCode = #{vouCode}</if>
+            <if test="receiveStatus != null and receiveStatus != ''">and receiveStatus = #{receiveStatus}</if>
+            <if test="accountId != null and accountId != ''">and accountId=#{accountId}</if>
+            <if test="issuedAccountId != null and issuedAccountId != ''">and issuedAccountId=#{issuedAccountId}</if>
+        </where>
+        order by createTime desc
+    </select>
+
+    <insert id="batchSave" parameterType="com.sobey.module.voucher.model.Voucher">
+        insert into mall_voucher
+        (uuid,vouCode,voucherType,account,accountId,issuedAccount,issuedAccountId,issuedPhone,amount,receiveStatus,client,seller,remark,createName,createTime,expireTime,updateTime)
+        values
+        <foreach collection="vouchers" item="voucher" separator=",">
+            (#{voucher.uuid},#{voucher.vouCode},#{voucher.voucherType},#{voucher.account},#{voucher.accountId},#{voucher.issuedAccount},
+            #{voucher.issuedAccountId},#{voucher.issuedPhone},#{voucher.amount},#{voucher.receiveStatus},#{voucher.client},
+            #{voucher.seller},#{voucher.remark},#{voucher.createName},#{voucher.createTime},#{voucher.expireTime},#{voucher.updateTime})
+        </foreach>
+    </insert>
+
+</mapper>

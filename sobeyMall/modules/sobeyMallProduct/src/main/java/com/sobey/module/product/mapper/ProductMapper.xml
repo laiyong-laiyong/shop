@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sobey.module.product.mapper.ProductMapper">
+
+	
+	
+	
+	
+	
+	
+	<select id="list" resultMap="productList">
+		<include refid="selectSql"></include>
+		<include refid="whereSql"></include>
+	</select>
+	
+	<sql id="whereSql">
+	  <where>
+				<if test="name != null and name != ''"> and mp.name like CONCAT('%',#{name},'%')  </if>
+				
+				<if test="category != null"> 
+					<if test="category.name != null and category.name != ''"> and pc.name like CONCAT('%',#{category.name},'%')  </if>
+					<if test="category.uuid != null and category.uuid != ''"> and pc.uuid = #{category.uuid}  </if>
+					<if test="category.parentId != null and category.parentId != ''"> and pc.parentId = #{category.parentId}  </if>
+				</if>
+				<if test="uuid != null and uuid != ''"> and mp.uuid = #{uuid} </if>
+				<if test="code != null and code != ''"> and mp.code = #{code} </if>
+				<if test="createUserCode != null and createUserCode != ''"> and mp.createUserCode = #{createUserCode} </if>
+				<if test="siteCode != null and siteCode != ''"> and mp.siteCode = #{siteCode} </if>
+				<if test="state != null and state != ''"> and mp.state = #{state} </if>
+				<if test="saleType != null and saleType != ''"> and mp.saleType = #{saleType} </if>
+				<if test="saleChannel != null and saleChannel != ''"> and mp.saleChannel = #{saleChannel} </if>
+				<if test="saleMode != null and saleMode != ''"> and mp.saleMode = #{saleMode} </if>
+				<if test="shelf != null and shelf != ''"> and mp.shelf = #{shelf} </if>
+				<if test="enableRelation != null and enableRelation != ''"> and mp.enableRelation = #{enableRelation} </if>
+				<if test="startDate != null "><![CDATA[ and #{startDate} <= createDate ]]></if>
+				<if test="endDate != null"><![CDATA[ and #{endDate} >= createDate ]]></if>
+	 </where>
+	 order by mp.createDate desc
+	</sql>
+	
+	
+	<sql id="selectSql">
+	
+		select
+			mp.uuid,
+			mp.name,
+			mp.categoryId,
+			mp.desc,
+			mp.summary,
+			mp.createDate,
+			mp.updateDate,
+			mp.price,
+			mp.mediaDir,
+	        mp.saleType,
+	        mp.saleMode,
+	        mp.saleChannel,
+	        mp.state,
+	        mp.openInterface,
+	        mp.closeInterface,
+	        mp.renewInterface,
+	        mp.chargingInterface,
+            mp.destroyInterface,
+	        mp.voucher,
+	        mp.console,
+	        mp.priceDesc,
+			mp.resourceId as parentResourceId,
+            mp.resourceCode as parentResourceCode,
+            mp.logo,
+            mp.code,
+            mp.banner,
+            mp.masterGraph,
+            mp.scene,
+            mp.userGuide,
+            mp.developGuide,
+            mp.priceTable,
+            mp.createUserCode,
+            mp.newLaunch,
+            mp.hot,
+            mp.enablePackagesNotify,
+            mp.notifyPackagesUrl,
+            mp.priceLimited,
+            mp.siteCode,
+            mp.shelf,
+            mp.enableRelation,
+			pc.uuid as ctUuid,
+			pc.name as ctName,
+			pc.desc as ctDesc,
+			pc.parentId
+			
+		from mall_product mp
+		left join mall_product_category pc on mp.categoryId =  pc.uuid
+	</sql>
+	
+	<select id="statistic" resultType="java.util.HashMap">
+		select
+			mp.state as state,
+			count(mp.state) as number
+		from mall_product mp group by mp.state
+		<include refid="whereSql"></include>
+	</select>
+	
+	<select id="page" resultMap="productList" parameterType="com.sobey.module.product.model.Product">
+		<include refid="selectSql"></include>
+		<include refid="whereSql"></include>
+	</select>
+	
+	
+	
+	<resultMap id="productList" type="com.sobey.module.product.model.Product" >
+		<id property="uuid" column="uuid"/>
+		<result property="name" column="name"/>
+		<result property="summary" column="summary"/>
+		<result property="categoryId" column="categoryId"/>
+		<result property="desc" column="desc"/>
+		<result property="createDate" column="createDate"/>
+		<result property="updateDate" column="updateDate"/>
+		<result property="price" column="price"/>
+		<result property="resourceId" column="parentResourceId"/>
+		<result property="resourceCode" column="parentResourceCode"/>
+		<result property="mediaDir" column="mediaDir"/>
+		<result property="saleType" column="saleType"/>
+		<result property="saleMode" column="saleMode"/>
+		<result property="saleChannel" column="saleChannel"/>
+		<result property="state" column="state"/>
+		<result property="console" column="console"/>
+		<result property="chargingInterface" column="chargingInterface"/>
+		<result property="console" column="console"/>
+		<result property="openInterface" column="openInterface"/>
+		<result property="closeInterface" column="closeInterface"/>
+		<result property="renewInterface" column="renewInterface"/>
+		<result property="priceDesc" column="priceDesc"/>
+		<result property="logo" column="logo"/>
+		<result property="banner" column="banner"/>
+		<result property="masterGraph" column="masterGraph"/>
+		<result property="scene" column="scene"/>
+		<result property="userGuide" column="userGuide"/>
+		<result property="developGuide" column="developGuide"/>
+		<result property="priceTable" column="priceTable"/>
+		<result property="code" column="code"/>
+		<result property="createUserCode" column="createUserCode"/>
+		<result property="destroyInterface" column="destroyInterface"/>
+		<result property="hot" column="hot"/>
+		<result property="newLaunch" column="newLaunch"/>
+		<result property="voucher" column="voucher"/>
+		<result property="priceLimited" column="priceLimited"/>
+		<result property="enablePackagesNotify" column="enablePackagesNotify"/>
+		<result property="notifyPackagesUrl" column="notifyPackagesUrl"/>
+		<result property="siteCode" column="siteCode"/>
+		<result property="shelf" column="shelf"/>
+		<result property="enableRelation" column="enableRelation"/>
+		
+		<association property="category"  resultMap="category">
+		</association>
+		
+		
+		
+	</resultMap>
+	
+	
+	<resultMap id="category" type="com.sobey.module.category.model.Category" >
+		<id property="uuid" column="ctUuid"/>
+		<result property="name" column="ctName"/>
+		<result property="desc" column="ctDesc"/>
+		<result property="parentId" column="parentId"/>
+	</resultMap>
+	
+	
+	<resultMap id="spots" type="com.sobey.module.brightSpot.model.BrightSpot" >
+		<id property="uuid" column="spotUuid"/>
+		<result property="name" column="spotName"/>
+		<result property="desc" column="spotDesc"/>
+		<result property="productId" column="spotProductId"/>
+		<result property="createDate" column="spotCreateDate"/>
+		
+		<collection property="medias"  resultMap="spotMedia" ></collection>
+	</resultMap>
+	
+	<resultMap id="spotMedia" type="com.sobey.module.media.model.Media" >
+		<id property="uuid" column="spotMdUuid"/>
+		<result property="type" column="spotMdType"/>
+		<result property="address" column="spotMdAddress"/>
+		<result property="productId" column="spotMdProductId"/>
+		<result property="mediaId" column="spotMdMediaId"/>
+	</resultMap>
+	
+	<resultMap id="logoList" type="com.sobey.module.media.model.Media" >
+		<id property="uuid" column="lgmdUuid"/>
+		<result property="type" column="lgmdType"/>
+		<result property="address" column="lgmdAddress"/>
+		<result property="productId" column="lgmdProductId"/>
+		<result property="mediaId" column="lgmdMediaId"/>
+	</resultMap>
+	
+	<resultMap id="masterList" type="com.sobey.module.media.model.Media" >
+		<id property="uuid" column="mtmdUuid"/>
+		<result property="type" column="mtmdType"/>
+		<result property="address" column="mtmdAddress"/>
+		<result property="productId" column="mtmdProductId"/>
+		<result property="mediaId" column="mtmdMediaId"/>
+	</resultMap>
+	
+	<resultMap id="bannerList" type="com.sobey.module.media.model.Media" >
+		<id property="uuid" column="bnmdUuid"/>
+		<result property="type" column="bnmdType"/>
+		<result property="address" column="bnmdAddress"/>
+		<result property="productId" column="bnmdProductId"/>
+		<result property="mediaId" column="bnmdMediaId"/>
+	</resultMap>
+	
+	<resultMap id="sceneList" type="com.sobey.module.media.model.Media" >
+		<id property="uuid" column="snmdUuid"/>
+		<result property="type" column="snmdType"/>
+		<result property="address" column="snmdAddress"/>
+		<result property="productId" column="snmdProductId"/>
+		<result property="mediaId" column="snmdMediaId"/>
+	</resultMap>
+	<resultMap id="userGuideList" type="com.sobey.module.media.model.Media" >
+		<id property="uuid" column="ugmdUuid"/>
+		<result property="type" column="ugmdType"/>
+		<result property="address" column="ugmdAddress"/>
+		<result property="productId" column="ugmdProductId"/>
+		<result property="mediaId" column="ugmdMediaId"/>
+	</resultMap>
+	
+	<resultMap id="developGuideList" type="com.sobey.module.media.model.Media" >
+		<id property="uuid" column="dgmdUuid"/>
+		<result property="type" column="dgmdType"/>
+		<result property="address" column="dgmdAddress"/>
+		<result property="productId" column="dgmdProductId"/>
+		<result property="mediaId" column="dgmdMediaId"/>
+	</resultMap>
+	<resultMap id="priceTableList" type="com.sobey.module.media.model.Media" >
+		<id property="uuid" column="ptmdUuid"/>
+		<result property="type" column="ptmdType"/>
+		<result property="address" column="ptmdAddress"/>
+		<result property="productId" column="ptmdProductId"/>
+		<result property="mediaId" column="ptmdMediaId"/>
+	</resultMap>
+	
+	
+	<resultMap id="functions" type="com.sobey.module.function.model.Function" >
+		<id property="uuid" column="ftUuid"/>
+		<result property="name" column="ftName"/>
+		<result property="desc" column="ftDesc"/>
+		<result property="productId" column="ftProductId"/>
+	</resultMap>
+	
+	<resultMap id="cases" type="com.sobey.module.cooperationCase.model.CooperationCase" >
+		<id property="uuid" column="caseUuid"/>
+		<result property="name" column="caseName"/>
+		<result property="desc" column="caseDesc"/>
+		<result property="productId" column="caseProductId"/>
+	</resultMap>
+	
+	<resultMap id="versions" type="com.sobey.module.version.model.Version" >
+		<id property="uuid" column="vsUuid"/>
+		<result property="name" column="vsName"/>
+		<result property="code" column="vsCode"/>
+		<result property="desc" column="vsDesc"/>
+		<result property="priceYear" column="vsPriceYear"/>
+		<result property="priceMonth" column="vsPriceMonth"/>
+		<result property="productId" column="vsProductId"/>
+		<collection property="customs"  resultMap="customs" ></collection>
+	</resultMap>
+	
+	
+	<resultMap id="customs" type="com.sobey.module.versionCustom.model.VersionCustom" >
+		<id property="uuid" column="customUuid"/>
+		<result property="name" column="customName"/>
+		<result property="enable" column="enable"/>
+		<result property="versionId" column="versionId"/>
+		<collection property="options"  resultMap="options" ></collection>
+	</resultMap>
+	
+	<resultMap id="options" type="com.sobey.module.versionCustomOption.model.VersionCustomOption" >
+		<id property="uuid" column="optUuid"/>
+		<result property="name" column="optName"/>
+		<result property="desc" column="optDesc"/>
+		<result property="priceYear" column="optPriceYear"/>
+		<result property="priceMonth" column="optPriceMonth"/>
+		<result property="customId" column="customId"/>
+	</resultMap>
+	
+	<resultMap id="privileges" type="com.sobey.module.productPrivilege.model.ProductPrivilege" >
+		<id property="uuid" column="pgUuid"/>
+		<result property="name" column="pgName"/>
+		<result property="type" column="pgType"/>
+		<result property="desc" column="pgDesc"/>
+		<result property="productId" column="pgProductId"/>
+		<result property="resourceId" column="childResourceId"/>
+		<result property="resourceCode" column="childResourceCode"/>
+		<result property="roleId" column="childRoleId"/>
+		<result property="roleCode" column="childRoleCode"/>
+	</resultMap>
+	
+</mapper>

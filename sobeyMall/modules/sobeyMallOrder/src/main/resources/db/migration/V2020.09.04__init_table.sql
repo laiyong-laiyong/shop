@@ -1,0 +1,1 @@
+ALTER TABLE mall_personal_bill ADD COLUMN saleAccountId VARCHAR(255) COMMENT '销售userCode';
