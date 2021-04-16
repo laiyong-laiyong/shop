@@ -458,4 +458,8 @@ public class BalanceRechargeService extends ServiceImpl<BalanceRechargeMapper, B
         return maps;
     }
 
+
+    public void getTotal() {
+        
+    }
 }
