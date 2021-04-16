@@ -65,4 +65,10 @@ public class BalanceRechargeController {
         brs.download(request,response,language,balanceRecharge);
     }
 
+    @PassToken
+    @GetMapping
+    @ApiOperation(value = "总额统计",httpMethod = "GET")
+    public ResultInfo getTotal() {
+        return new ResultInfo();
+    }
 }
