@@ -16,4 +16,5 @@ public interface BalanceRechargeMapper extends SupperMapper<BalanceRecharge> {
     BalanceRecharge getOne(@Param("id") Long id);
     List<BalanceRecharge> page(Page<BalanceRecharge> page,BalanceRecharge balanceRecharge);
     List<BalanceRecharge> list(BalanceRecharge balanceRecharge);
+    List getTotal();
 }
